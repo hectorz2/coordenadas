@@ -1,20 +1,23 @@
 {
-  "name": "electron-quick-start",
+  "name": "MC-CoordHelper",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "A simple and minimalist minecraft coordinate helper",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/hectorz2/coordenadas",
   "keywords": [
     "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
+    "coordinates",
+    "minecraft",
+    "MC",
+    "helper",
+	"coord",
+	"CoordHelper",
+	"MC-CoordHelper"
   ],
-  "author": "GitHub",
+  "author": "Héctor Zaragoza Arranz",
   "license": "CC0-1.0",
   "devDependencies": {
     "electron": "~1.7.8"
