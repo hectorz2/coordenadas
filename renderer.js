@@ -6,3 +6,9 @@
 const remote = require('electron').remote;
  
 const main = remote.require('./main.js');
+
+const os = require('os');
+
+$(document).ready(function(){
+	alert(os.homedir());
+});
