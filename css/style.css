@@ -1,3 +1,31 @@
-p#a {
-	border: 1px solid black;
+@font-face {
+	font-family: 'minecraftfont';
+	src: url('./fonts/minecraftfont.eot');
+	src: local('minecraftfont'), url('./fonts/minecraftfont.woff') format('woff'), url('./fonts/minecraftfont.ttf') format('truetype');
+}
+body {
+	background: #aa8f79;
+}
+
+.block  {
+	opacity: 0.7;
+	transition: all 1s;
+	float: left;
+}
+.block img {
+	width: 100px;
+	height: auto;
+}
+
+.block h4 {
+	font-family: 'minecraftfont' !important;
+
+	text-align: center;
+	margin-bottom: 5px;
+}
+
+.block:hover {
+	opacity: 1;
+	transform: scale(1.1);
+	font-style: italic;
 }
