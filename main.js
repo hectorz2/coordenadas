@@ -18,7 +18,7 @@ function createWindow () {
 
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'index.html'),
+    pathname: path.join(__dirname, 'login.html'),
     protocol: 'file:',
     slashes: true
   }));
@@ -42,7 +42,7 @@ app.on('ready', function(){
 	//Create global shortcuts
 	globalShortcut.register('CommandOrControl+Shift+C', () => {
 		console.log('CommandOrControl+Shift+C is pressed');
-		
+		loadWorlds();
 	});
 	createWindow();
 });
@@ -66,3 +66,39 @@ app.on('activate', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+const io = require('socket.io-client');
+const socket = io.connect('http://localhost:3000', {reconnect: true});
+
+socket.on('connect', function(){
+	console.log('connected to websocket server');
+});
+	
+socket.on('connect_error', function(error){
+	console.log('Server down. ' + error);
+	mainWindow.webContents.send('error', error); 
+});
+	
+/*socket.on('time', function(timeString) {
+	console.log('Server time: ' + timeString);
+	mainWindow.webContents.send('time', timeString); 
+});*/
+
+exports.loadWorlds = function(){
+	loadWorlds
+}
+
+function loadWorlds(){
+	console.log('loading worlds list');
+	mainWindow.loadURL(url.format({
+    pathname: path.join(__dirname, 'boot.html'),
+    protocol: 'file:',
+    slashes: true
+  })); 
+  mainWindow.show();
+}
+
+exports.register = function(nick, pwd){
+	console.log('registering user ' + nick);
+	socket.emit('register', {nick: nick, pwd: pwd});
+}

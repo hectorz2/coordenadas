@@ -3,23 +3,25 @@
 // All of the Node.js APIs are available in this process.
 
 
-const remote = require('electron').remote;
+const {ipcRenderer, remote} = require('electron');
  
 const main = remote.require('./main.js');
 
-//const os = require('os');
-
-const io = require('socket.io-client');
-const socket = io.connect('http://localhost:3000', {reconnect: true});
-
 $(document).ready(function(){
+	var el = $('#server-time');
+    
+	$('#worlds').click(loadWorlds);
 	
-	socket.on('connect', function(){
-		console.log('connected to websocket server');
+	ipcRenderer.on('time', (event, timeString) => {  
+		el.html('Server time: ' + timeString);
 	});
 	
-      var el = $('#server-time');
-      socket.on('time', function(timeString) {
-        el.html('Server time: ' + timeString);
-      });
+	ipcRenderer.on('error', (event, error) => {  
+		console.log(error);
+		el.html('Server Down: ' + error.type);
+	});	  
 });
+
+function loadWorlds(){
+	main.loadWorlds();
+}
