@@ -3,12 +3,13 @@
   <head>
     <meta charset="UTF-8">
 	<link rel="stylesheet" href="./lib/jquery-ui-1.12.1/jquery-ui.min.css"/>
-	
+	<link rel="stylesheet" href="./lib/bootstrap-3.3.7/css/bootstrap.min.css"/>
 	
 	<link rel="stylesheet" href="./css/style.css"/>
 	
 	<script> window.$ = window.jQuery = require('./lib/jquery-3.2.1.min.js');</script>
 	<script src="./lib/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+	<script src="./lib/bootstrap-3.3.7/js/bootstrap.min.js"></script>
 	
 	<script>
       require('./renderer.js');
@@ -17,21 +18,31 @@
     <title>Prueba</title>
   </head>
   <body>
-	<h1>Server Time</h1>
-    <p id='server-time'></p>
-	<div>
+	<div class="page" id="main">
 		<div class="block" id="worlds">
-		<h4>Texto 1 </h4>
-		<img src="img/1-3.png" alt="1"/>
+			<h4>Texto 1 </h4>
+			<img src="img/1-3.png" alt="1"/>
 		</div>
 		<div class="block">
-		<h4>Texto 2 </h4>
-		<img src="img/2.png" alt="2"/>
+			<h4>Texto 2 </h4>
+			<img src="img/2.png" alt="2"/>
 		</div>
 		<div class="block">
-		<h4>Texto 3 </h4>
-		<img src="img/3.png" alt="3"/>
+			<h4>Texto 3 </h4>
+			<img src="img/3.png" alt="3"/>
 		</div>
     </div>
+	<br/>
+	<div class="page" id="register">
+		<h1>Registro</h1>
+		<form>
+			<label for="nick">Nick: </label>
+			<input type="text" id="nick"/> <br/>
+			<label for="pwd">Password: </label>
+			<input type="password" id="pwd"/> <br/>
+			<input type="button" id="registerBtn" value="Registrar" />
+		</form>
+		<button class="btn" id="back"><span class="glyphicon glyphicon-arrow-left"></span></button>
+	</div>
   </body>
 </html>

@@ -14,11 +14,11 @@ const url = require('url');
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600});
+  mainWindow = new BrowserWindow({width: 430, height: 250});
 
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'login.html'),
+    pathname: path.join(__dirname, 'index.html'),
     protocol: 'file:',
     slashes: true
   }));
@@ -85,7 +85,7 @@ socket.on('connect_error', function(error){
 });*/
 
 exports.loadWorlds = function(){
-	loadWorlds
+	loadWorlds();
 }
 
 function loadWorlds(){
@@ -98,7 +98,12 @@ function loadWorlds(){
   mainWindow.show();
 }
 
-exports.register = function(nick, pwd){
+exports.register = function(nick, pwd, answer){
 	console.log('registering user ' + nick);
-	socket.emit('register', {nick: nick, pwd: pwd});
+	socket.emit('register', {nick: nick, pwd: pwd}, (state) => {
+		var msg = state==0?'User Registered':state==1?'There was a problem with the database':'Nickname Already Registered';
+		answer(msg);
+	});
+	//socket.removeListener('registerBack');
+	//socket.on('registerBack', function(data){console.log(data.state)});
 }

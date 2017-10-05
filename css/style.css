@@ -3,14 +3,24 @@
 	src: url('./fonts/minecraftfont.eot');
 	src: local('minecraftfont'), url('./fonts/minecraftfont.woff') format('woff'), url('./fonts/minecraftfont.ttf') format('truetype');
 }
+
+@font-face {
+	font-family: 'mc';
+	src: url('./fonts/Minercraftory.ttf');
+}
+* {
+	/*font-family: 'mc';*/
+}
 body {
 	background: #aa8f79;
+	font-family: 'minecraftfont' !important;
 }
 
-.block  {
+.block  {	
 	opacity: 0.7;
 	transition: all 1s;
 	float: left;
+	margin: 15px;
 }
 .block img {
 	width: 100px;
@@ -18,8 +28,6 @@ body {
 }
 
 .block h4 {
-	font-family: 'minecraftfont' !important;
-
 	text-align: center;
 	margin-bottom: 5px;
 }
@@ -27,5 +35,17 @@ body {
 .block:hover {
 	opacity: 1;
 	transform: scale(1.1);
-	
+}
+
+.page {
+	position: absolute;
+	top: 50%;
+	left: 0;
+	transform: translate(0, -50%);
+	opacity: 0;
+	transition: 1s;
+}
+#main {
+	opacity: 1;
+	z-index: 9999;
 }

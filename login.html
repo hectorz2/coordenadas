@@ -23,7 +23,9 @@
 		function register(){
 			var nick = $('#nick').val();
 			var pwd = $('#pwd').val();
-			main.register(nick, pwd);
+			main.register(nick, pwd, function(msg){
+				alert(msg);
+			});
 		}
     </script>
   
