@@ -18,6 +18,16 @@
     <title>Prueba</title>
   </head>
   <body>
+  <nav class="container-fluid">
+	<div class="row">
+		<div class="col-xs-2">
+			<button class="btn btn-primary">Salir <span class="glyphicon glyphicon-log-out"></span></button>
+		</div>
+		<div class="col-xs-2 col-xs-offset-8">
+			<button class="btn btn-danger pull-right" id="close"><span class="glyphicon glyphicon-remove"></span></button>
+		</div>
+	</div>
+  </nav>
 	<div class="page" id="main">
 		<div class="block" id="worlds">
 			<h4>Texto 1 </h4>
@@ -34,15 +44,35 @@
     </div>
 	<br/>
 	<div class="page" id="register">
-		<h1>Registro</h1>
-		<form>
-			<label for="nick">Nick: </label>
-			<input type="text" id="nick"/> <br/>
-			<label for="pwd">Password: </label>
-			<input type="password" id="pwd"/> <br/>
-			<input type="button" id="registerBtn" value="Registrar" />
-		</form>
-		<button class="btn" id="back"><span class="glyphicon glyphicon-arrow-left"></span></button>
+		<div class="container">
+			<h1>Registro</h1>
+			<form>
+				<label for="nick">Nick </label>
+				<input type="text" id="nick" class="form-control"/>
+				<label for="pwd">Password </label>
+				<input type="password" id="pwd" class="form-control"/>
+				<input type="button" id="registerBtn" value="Registrar" class="btn btn-primary" />
+			</form>
+			<button class="btn back"><span class="glyphicon glyphicon-arrow-left"></span></button>
+		</div>
+	</div>
+	<div class="page" id="login">
+		<div class="container">
+			<h1>Login</h1>
+			<form id="loginForm">
+				<label for="nickL">Nick </label>
+				<input type="text" id="nickL" class="form-control"/>
+				<label for="pwdL">Password </label>
+				<input type="password" id="pwdL" class="form-control"/> <br/>
+				<label for="remember">Recuérdame</label>
+				<input type="radio" name="remember" id="remember" value="1" checked="checked"/>
+				<label for="notRemember">No me recuerdes</label>
+				<input type="radio" name="remember" id="notRemember" value="0"/> <br/>
+				<input type="button" id="loginBtn" value="Entrar" class="btn btn-primary" />
+			</form>
+			<p>¿No estás registrado? <button class="btn" id="goToRegister">Regístrate <span class="glyphicon glyphicon-user"></span></button></p>
+			<button class="btn back"><span class="glyphicon glyphicon-arrow-left"></span></button>
+		</div>
 	</div>
   </body>
 </html>

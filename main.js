@@ -9,12 +9,18 @@ const BrowserWindow = electron.BrowserWindow;
 const path = require('path');
 const url = require('url');
 
+const settings = require('electron-settings');
+
+const io = require('socket.io-client');
+const socket = io.connect('http://localhost:3000', {reconnect: true});
+
+var userLogged = {};
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 430, height: 250});
+  mainWindow = new BrowserWindow({width: 430, height: 500/*250*/, frame: false});
 
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
@@ -42,8 +48,15 @@ app.on('ready', function(){
 	//Create global shortcuts
 	globalShortcut.register('CommandOrControl+Shift+C', () => {
 		console.log('CommandOrControl+Shift+C is pressed');
-		loadWorlds();
+		//loadWorlds();
 	});
+	
+	if(settings.has('userRemembered')){
+		userLogged.nick = settings.get('userRemembered');
+		if(settings.has('keyRemembered')){
+			userLogged.key = settings.get('keyRemembered');
+		}
+	}
 	createWindow();
 });
 
@@ -64,25 +77,38 @@ app.on('activate', function () {
   }
 });
 
+app.on('before-quit', function(){
+	if(userLogged != {})
+	socket.emit('quit', {nick: userLogged.nick});
+});
+
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
-const io = require('socket.io-client');
-const socket = io.connect('http://localhost:3000', {reconnect: true});
+
 
 socket.on('connect', function(){
 	console.log('connected to websocket server');
+	if(userLogged != {})
+		socket.emit('getLoginState', userLogged, (state) => {
+			if(!state) userLogged = {}; 
+		});
 });
 	
 socket.on('connect_error', function(error){
 	console.log('Server down. ' + error);
 	mainWindow.webContents.send('error', error); 
+	userLogged = {};
 });
 	
 /*socket.on('time', function(timeString) {
 	console.log('Server time: ' + timeString);
 	mainWindow.webContents.send('time', timeString); 
 });*/
+
+exports.quit = function(){
+	app.quit();
+}
 
 exports.loadWorlds = function(){
 	loadWorlds();
@@ -104,6 +130,26 @@ exports.register = function(nick, pwd, answer){
 		var msg = state==0?'User Registered':state==1?'There was a problem with the database':'Nickname Already Registered';
 		answer(msg);
 	});
-	//socket.removeListener('registerBack');
-	//socket.on('registerBack', function(data){console.log(data.state)});
+}
+
+
+exports.login = function(nick, pwd, remember, answer){
+	console.log('loging user ' + nick);
+	socket.emit('login', {nick: nick, pwd: pwd, remember: remember}, (state, key) => {
+		if(state == 0){
+			userLogged = {
+				nick: nick,
+				key: key
+			};
+			if(remember) {
+				settings.set('userRemembered', nick);
+				settings.set('keyRemembered', key);
+			}
+		}
+		answer(state);
+	});
+}
+
+exports.loggedUser = function(){
+	return userLogged=={}?null:userLogged.nick;
 }

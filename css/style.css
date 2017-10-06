@@ -14,8 +14,41 @@
 body {
 	background: #aa8f79;
 	font-family: 'minecraftfont' !important;
+	overflow: hidden;
+	
 }
 
+input[type="submit"],
+input[type="reset"],
+input[type="button"],
+input[type="text"],
+button,
+textarea {
+	-webkit-app-region: no-drag;
+}
+
+nav {
+	position: fixed;
+	top: 0;
+	left: 0;
+	margin: 3px;
+	margin-top: 0;
+	padding: 3px;
+	width: 100vw;
+	height: 35px;
+	/*background-color: black;*/
+	background-color: rgba(54, 25, 25, 0.1);
+	z-index: 99999;
+	-ms-overflow-style: scrollbar;
+    -webkit-app-region:drag;
+}
+nav * {
+	height: 100%;
+}
+
+nav button {
+	box-shadow: 2px 2px 18px -1px rgba(0,0,0,0.75);
+}
 .block  {	
 	opacity: 0.7;
 	transition: all 1s;
@@ -39,7 +72,7 @@ body {
 
 .page {
 	position: absolute;
-	top: 50%;
+	top: 55%;
 	left: 0;
 	transform: translate(0, -50%);
 	opacity: 0;
