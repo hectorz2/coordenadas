@@ -9,11 +9,11 @@
 	src: url('./fonts/Minercraftory.ttf');
 }
 * {
-	/*font-family: 'mc';*/
+	font-family: 'mc';
 }
 body {
 	background: #aa8f79;
-	font-family: 'minecraftfont' !important;
+	/*font-family: 'minecraftfont' !important*/;
 	overflow: hidden;
 	
 }
@@ -35,7 +35,7 @@ nav {
 	margin-top: 0;
 	padding: 3px;
 	width: 100vw;
-	height: 35px;
+	height: 42px;
 	/*background-color: black;*/
 	background-color: rgba(54, 25, 25, 0.1);
 	z-index: 99999;
@@ -43,7 +43,7 @@ nav {
     -webkit-app-region:drag;
 }
 nav * {
-	height: 100%;
+	/*height: 100%;*/
 }
 
 nav button {
@@ -72,9 +72,9 @@ nav button {
 
 .page {
 	position: absolute;
-	top: 55%;
 	left: 0;
-	transform: translate(0, -50%);
+	top: 55%;
+	transform: translate(4%, -55%);
 	opacity: 0;
 	transition: 1s;
 }

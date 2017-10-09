@@ -22,6 +22,12 @@ var usersLogged = { //TODO que tengan una clave aleatoria asociada
 	
 };
 
+var worlds = {
+	
+};
+
+
+
 
 io.on('connection', (socket) => {
 	var userLogged = null;
@@ -42,8 +48,8 @@ io.on('connection', (socket) => {
 		dao.user.login(user, function(state){
 			if(state == 0){
 				console.log('users already loggeds: ' + usersLogged);
-				if(!usersLogged.hasOwnProperty(user.nick)){
-					console.log('saving login');
+				//if(!usersLogged.hasOwnProperty(user.nick)){
+					
 					var key = Math.random()             // Generate random number, eg: 0.123456
 								.toString(36)           // Convert  to base-36 : "0.4fzyo82mvyr"
 								.slice(-12);			// Cut off last 12 characters : "fzyo82mvyr"
@@ -51,21 +57,50 @@ io.on('connection', (socket) => {
 						remember: user.remember,
 						key: key
 					};
+					console.log('saving login: ' + usersLogged[user.nick].toString());
 					answer(state, key);
-				} else {
+				/*} else {
 					console.log('user already logged');
-				}
+				}*/
 			} else {
 				answer(state, null);
 			}
 		});
 	});
 	
+	socket.on('logout', (user, answer) => {
+		console.log('loging out user: ' + user.nick);
+		if(usersLogged.hasOwnProperty(user.nick) && usersLogged[user.nick].key == user.key){
+			delete usersLogged[user.nick];
+			console.log('done');
+			answer(0);
+		} else {
+			console.log('there was an error');
+			answer(-1);
+		}
+	});
+	
+	socket.on('worldList', (user, answer) => {
+		console.log('retrieving world list of user: ' + user.nick);
+		if(usersLogged.hasOwnProperty(user.nick) && usersLogged[user.nick].key == user.key){
+			dao.world.list(user.nick, function(state, worlds){
+				answer(state, worlds);
+			});
+		} else {
+			console.log('there was an error');
+			answer(-1, null)
+		}
+	});
+	
 	socket.on('quit', (user) => {
-		if(usersLogged.hasOwnProperty(user.nick))
+		if(usersLogged.hasOwnProperty(user.nick) && usersLogged[user.nick].key == user.key)
 			if(!usersLogged[user.nick].remember)
 				delete usersLogged[user.nick];
-	})
+	});
+	
+	
+	socket.join('prueba');
+	io.in('prueba').emit('kk', 'kk');
 });
 
 

@@ -20,7 +20,7 @@ var userLogged = {};
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 430, height: 500/*250*/, frame: false});
+  mainWindow = new BrowserWindow({width: 430, height: 500/*250*/, frame: false, icon: './img/icon.png'});
 
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
@@ -48,7 +48,12 @@ app.on('ready', function(){
 	//Create global shortcuts
 	globalShortcut.register('CommandOrControl+Shift+C', () => {
 		console.log('CommandOrControl+Shift+C is pressed');
-		//loadWorlds();
+	});
+	
+	globalShortcut.register('CommandOrControl+Shift+R', () => {
+		console.log('CommandOrControl+Shift+R is pressed');
+		
+		mainWindow.reload();
 	});
 	
 	if(settings.has('userRemembered')){
@@ -110,20 +115,6 @@ exports.quit = function(){
 	app.quit();
 }
 
-exports.loadWorlds = function(){
-	loadWorlds();
-}
-
-function loadWorlds(){
-	console.log('loading worlds list');
-	mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'boot.html'),
-    protocol: 'file:',
-    slashes: true
-  })); 
-  mainWindow.show();
-}
-
 exports.register = function(nick, pwd, answer){
 	console.log('registering user ' + nick);
 	socket.emit('register', {nick: nick, pwd: pwd}, (state) => {
@@ -153,3 +144,23 @@ exports.login = function(nick, pwd, remember, answer){
 exports.loggedUser = function(){
 	return userLogged=={}?null:userLogged.nick;
 }
+
+exports.logout = function(answer){
+	settings.delete('userRemembered');
+	settings.delete('keyRemembered');
+	socket.emit('logout', userLogged, (state) => {
+		userLogged = {};
+		answer(state);
+	});
+}
+
+var worldSocket = null;
+exports.loadList = function(answer){
+	socket.emit('worldList', userLogged, function(state, worlds){
+		answer(state, worlds);
+	});
+}
+
+socket.on('kk', function(msg){
+	console.log('pruebee msg: ' + msg);
+})

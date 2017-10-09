@@ -58,5 +58,18 @@ module.exports = {
 				}
 			});
 		}
+	},
+	world: {
+		list: function(nick, callback){
+			var sql = 'SELECT * FROM worlds WHERE id IN (SELECT world FROM user_world WHERE nick = ?)';
+			con.query(sql, [nick], function(err, result){
+				if(err){
+					console.log(err);
+					callback(1, null);
+				} else {
+					callback(0, result);
+				}
+			});
+		}
 	}
 };
