@@ -18,6 +18,9 @@ var userLogged = {};
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 
+
+var mainWindow = null;
+var coordinatesWindow = null;
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 430, height: 500/*250*/, frame: false, icon: './img/icon.png'});
@@ -118,8 +121,7 @@ exports.quit = function(){
 exports.register = function(nick, pwd, answer){
 	console.log('registering user ' + nick);
 	socket.emit('register', {nick: nick, pwd: pwd}, (state) => {
-		var msg = state==0?'User Registered':state==1?'There was a problem with the database':'Nickname Already Registered';
-		answer(msg);
+		answer(state);
 	});
 }
 
@@ -130,7 +132,8 @@ exports.login = function(nick, pwd, remember, answer){
 		if(state == 0){
 			userLogged = {
 				nick: nick,
-				key: key
+				key: key,
+				world: null
 			};
 			if(remember) {
 				settings.set('userRemembered', nick);
@@ -163,4 +166,34 @@ exports.loadList = function(answer){
 
 socket.on('kk', function(msg){
 	console.log('pruebee msg: ' + msg);
-})
+});
+
+exports.selectWorld = function(worldId, answer){
+	console.log('selecting world: ' + worldId);
+	userLogged.worldId = worldId;
+	socket.emit('selectWorld', userLogged, function(state){
+		answer(state);
+		if(coordinatesWindow != null){
+			coordinatesWindow.close();
+		}
+		coordinatesWindow = new BrowserWindow({width: 400, height: 800, frame: false});
+		
+		coordinatesWindow.loadURL(url.format({
+		pathname: path.join(__dirname, 'coordinates.html'),
+		protocol: 'file:',
+		slashes: true
+		}));
+
+		// Open the DevTools.
+		// coordinatesWindow.webContents.openDevTools()
+
+		// Emitted when the window is closed.
+		coordinatesWindow.on('closed', function () {
+		// Dereference the window object, usually you would store windows
+		// in an array if your app supports multi windows, this is the time
+		// when you should delete the corresponding element.
+			coordinatesWindow = null;
+		});
+	});
+}
+

@@ -80,5 +80,11 @@ nav button {
 }
 #main {
 	opacity: 1;
-	z-index: 9999;
+	z-index: 100;
+}
+
+#worldList {
+	width: 100%;
+	height: 300px;
+	overflow-y: scroll;
 }

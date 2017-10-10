@@ -98,6 +98,20 @@ io.on('connection', (socket) => {
 				delete usersLogged[user.nick];
 	});
 	
+	socket.on('selectWorld', (user, answer) => {
+		console.log('selecting world ' + user.worldId + ' for user: ' + user.nick);
+		if(usersLogged.hasOwnProperty(user.nick) && usersLogged[user.nick].key == user.key){
+			if(usersLogged[user.nick].worldId != null){
+				socket.leave(user.worldId);
+			}
+			usersLogged[user.nick].worldId = user.worldId;
+			socket.join(user.worldId);
+			io.in(user.worldId).emit('worldConnection', user.nick);
+			answer(0);
+		} else {
+			answer(1);
+		}
+	});
 	
 	socket.join('prueba');
 	io.in('prueba').emit('kk', 'kk');
