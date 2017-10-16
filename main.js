@@ -197,3 +197,31 @@ exports.selectWorld = function(worldId, answer){
 	});
 }
 
+exports.removeWorld = function(worldId, answer){
+	console.log('removing world: ' + worldId);
+	
+	socket.emit('removeWorld', {user: userLogged, id: worldId}, function(state){
+		answer(state);
+		console.log('world removed');
+	});
+	
+}
+
+exports.saveWorld = function(name, answer){
+	console.log('adding world with name: ' + name);
+	
+	socket.emit('createWorld', {user: userLogged, name: name}, function(state){
+		answer(state);
+		console.log('world created');
+	});
+}
+
+exports.closeCoordinates = function(){
+	console.log('closing coordinates window...');
+	userLogged.worldId = null;
+	coordinatesWindow.close();
+	socket.emit('leaveWorld', userLogged, function(state){
+		coordinatesWindow = null;
+		console.log('world leaved with state: ' + state);
+	});
+}

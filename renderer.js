@@ -9,6 +9,21 @@ const main = remote.require('./main.js');
 
 var userLogged = null;
 
+const state1Msg = 'Hubo uno o varios problemas, inténtalo de nuevo más tarde o contacta con el administrador a través del correo hector.zaragoza.arranz@gmail.com, ¡no muerdo!';
+
+function confirmDialog(confirmFunction, text) {
+	swal({
+		title: '¿Está seguro de realizar esta operación?',
+		text: text,
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Sí, estoy seguro',
+		cancelButtonText: 'No, sácame de aquí'
+		}).then(confirmFunction);
+}
+
 $(document).ready(function(){
 	//NAV BUTTONS
 	$('#close').click(function(){main.quit();});
@@ -31,6 +46,9 @@ $(document).ready(function(){
 	$('.back').click(function(){loadDiv('main')});
 	$('#registerBtn').click(register);
 	$('#loginBtn').click(login);
+	
+	$('#addWorldBtn').click(addWorld);
+	$('#saveWorldBtn').click(saveWorld);
 });
 
 function loadDiv(divId){
@@ -51,7 +69,7 @@ function register(){
 	$('#nick').val('');
 	$('#pwd').val('');
 		main.register(nick, pwd, function(state){
-			var msg = state==0?'User Registered':state==1?'There was a problem with the database':'Nickname Already Registered';
+			var msg = state==0?'Usuario Registrado Correctamente, ¡Corre, haz login!':state==1?state1Msg:'El nick ya existe, ¡Prueba otro!';
 			var type = state==0?'success':'error';
 			swal({title: msg, type: type});
 			loadDiv('login');
@@ -64,7 +82,7 @@ function login(){
 	var pwd = $('#pwdL').val();
 	var remember = $('input[name=remember]:checked', '#loginForm').val();
 	if(nick == '' || pwd == ''){
-		swal({title: 'Debe rellenar todos los campos', type: 'error'});
+		swal({title: 'Debes rellenar todos los campos', type: 'error'});
 	} else {
 		$('#nickL').val('');
 		$('#pwdL').val('');
@@ -72,7 +90,7 @@ function login(){
 		$('#notRemember').prop('checked', false);
 		remember = remember==1?true:false;	
 		main.login(nick, pwd, remember, function(state){
-			var msg = state==0?'User Logged':state==1?'There was a problem with the database':'Nickname Doesnt Registered or Incorrect Password';
+			var msg = state==0?'Login correcto, ¡Diviértete!':state==1?state1Msg:'El nick no existe o te has confundido de contraseña...';
 			var type = state==0?'success':'error';
 			swal({title: msg, type: type});
 			if(state == 0){
@@ -89,7 +107,7 @@ function login(){
 
 function logout(){
 	main.logout(function(state){
-		var msg = state==0?'Logout Done':'There was an error';	
+		var msg = state==0?'Has hecho logout, te echaremos de menos...':state1Msg;	
 		var type = 'success';
 		if(state == 0){
 			$('#logout').css('display', 'none');
@@ -108,7 +126,7 @@ function logout(){
 
 function loadList(){
 	main.loadList(function(state, worlds){
-		var msg = state==0?'Load Done':'There was an error';	
+		var msg = state==0?'Carga Completada':state1Msg;	
 		var type = state==0?'success':'error';
 		if(state == 0){
 			//console.log(worlds);
@@ -119,26 +137,56 @@ function loadList(){
 				$.each(worlds, function(index, world){
 					console.log(JSON.stringify(world));
 					var id = world.id;
-					var $item = $('<div class="list-group-item"></div>');
+					var $item = $('<div class="list-group-item" id="world' + id + '"></div>');
 					
 					var $row = $('<div class="row"></div>');
 					
-					var $col1 = $('<div class="col-xs-6" style="margin: 3%;"></div>');
+					var $col1 = $('<div class="col-xs-4" style="margin: 3%;"></div>');
 					var $nombre = $('<span>' + world.name + '</span>');
 					$col1.append($nombre);
 					
-					var $col2 = $('<div class="col-xs-4" style="margin: 1%;"></div>');
-					var $btn = $('<button class="btn"><span class="glyphicon glyphicon-arrow-right"></span></button>');
+					var $col2 = $('<div class="col-xs-2" style="margin: 1%;"></div>');
+					var $btn = $('<button class="btn btn-info"><span class="glyphicon glyphicon-arrow-right"></span></button>');
 					$btn.click(function(){
-						//swal('click!');
 						main.selectWorld(id, function(state){
-							swal(state);
+							if(state != 0)
+								swal(state1Msg);
 						});
 					});
 					$col2.append($btn);
 					
+					var $col3 = $('<div class="col-xs-2" style="margin: 1%;"></div>');
+					var $btnLeave = $('<button class="btn btn-warning"><span class="glyphicon glyphicon-log-out"></span></button>');
+					$btnLeave.click(function(){
+						confirmDialog(function(){
+							swal('click!');
+						}, 'Perderás el acceso al mundo y si no queda nadie... ¡Los datos serán borrados!');
+					});
+					$col3.append($btnLeave);
+					
+					var $col4 = $('<div class="col-xs-2" style="margin: 1%;"></div>');
+					var $btnRem = $('<button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>');
+					$btnRem.click(function(){
+						confirmDialog(function(){
+							main.removeWorld(id, function(state){
+							var msg = state==0?'El mundo ha sido borrado':state1Msg;
+							var type = state==0?'success':'error';
+							$('#world' + id).remove();
+							
+							swal({title: msg, type: type});
+							
+							});
+						}, 'Borrarás todos los datos del mundo a los demás. Si solo deseas salir, ¡Utiliza el otro botón!');
+						
+					});
+					$col4.append($btnRem);
+					
+					
+					
 					$row.append($col1);
 					$row.append($col2);
+					$row.append($col3);
+					$row.append($col4);
 					
 					$item.append($row);
 					$('#worldList').append($item);
@@ -146,13 +194,36 @@ function loadList(){
 					
 				//}
 			} else {
-				$('#worldList').html('<h1>Ups... No hay ningún mundo todavía...</h1>');
+				$('#worldList').html('<h1>Ups... No hay ningún mundo todavía... ¿Por qué no añades alguno?</h1>');
 			}
 			loadDiv('list');
 		} else
 			swal({title: msg, type: type});
 		
 	});
+	
+}
+
+function addWorld(){
+	$('#addWorldModal').modal('show');
+}
+function saveWorld(){
+	if($('#name').val() == '')
+		swal({title: 'Debe rellenar todos los campos', type: 'error'});
+	else {
+		var name = $('#name').val();
+		$('#name').val('');
+		main.saveWorld(name, function(state){
+			var msg = state==0?'Mundo creado. ¡Puedes comenzar a guardar tus coordenadas!':state1Msg;
+			var type = state==0?'success':'error';
+			if(state == 0) {
+				loadList();
+				$('#addWorldModal').modal('hide');
+			}
+			swal({title: msg, type: type});
+			
+		});
+	}
 	
 }
 

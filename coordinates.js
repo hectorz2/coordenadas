@@ -9,6 +9,7 @@ const main = remote.require('./main.js');
 
 
 $(document).ready(function(){
+	$('#close').click(function(){main.closeCoordinates();});
 	swal('ey');
 });
 

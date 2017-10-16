@@ -61,7 +61,7 @@ module.exports = {
 	},
 	world: {
 		list: function(nick, callback){
-			var sql = 'SELECT * FROM worlds WHERE id IN (SELECT world FROM user_world WHERE nick = ?)';
+			var sql = 'SELECT * FROM worlds WHERE id IN (SELECT world FROM user_world WHERE nick = ?) ORDER BY name';
 			con.query(sql, [nick], function(err, result){
 				if(err){
 					console.log(err);
@@ -69,6 +69,58 @@ module.exports = {
 				} else {
 					callback(0, result);
 				}
+			});
+		},
+		
+		delete: function(id, callback){ //TODO tendrá que borrar tabs y coordenadas
+			var sql = 'DELETE FROM user_world WHERE world = ?';
+			con.query(sql, [id], function(err, result){
+				if(err){
+					console.error(err);
+					callback(1);
+				} else {
+					console.log('relations deleted');
+					var sql = 'DELETE FROM worlds WHERE id = ?';
+					con.query(sql, [id], function(err, result){
+						if(err){
+							console.error(err);
+							callback(1);
+						} else {
+							console.log('world deleted');
+							callback(0);
+						}
+					});
+				}
+			})
+		}, 
+		
+		create: function(data, callback){
+			var sql = 'INSERT INTO worlds SET ?';
+			var values = {
+				name: data.name
+			};
+			con.query(sql, values, function(err, result){ 
+			if (err) {
+				console.error(err);
+				callback(1);
+			} else {
+				console.log('world created with id: ' + result.insertId);
+				var sql = 'INSERT INTO user_world SET ?';
+				var values = {
+					nick: data.user.nick,
+					world: result.insertId
+				}
+				con.query(sql, values, function(err, result){
+					if (err) {
+						console.error(err);
+						callback(1);
+					} else {
+						console.log('relation created');
+						callback(0);
+					}
+				});
+				
+			}
 			});
 		}
 	}

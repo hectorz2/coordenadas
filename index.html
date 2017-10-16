@@ -90,11 +90,39 @@
 						<button class="btn back"><span class="glyphicon glyphicon-arrow-left"></span></button>
 					</div>
 					<div class="col-xs-1 col-xs-offset-5">
-						<button class="btn btn-success"><span class="glyphicon glyphicon-plus"></span></button>
+						<button class="btn btn-success" id="addWorldBtn"><span class="glyphicon glyphicon-plus"></span></button>
 					</div>
 				</div>
 			</div>
 		</div>
+		
+		<!-- Modals -->
+		<!-- Modal -->
+		<div id="addWorldModal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+
+				<!-- Modal content-->
+				<div class="modal-content">
+				  <div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Añadir Mundo</h4>
+				  </div>
+				  <div class="modal-body">
+					<form id="addWorldForm" onsubmit="return false">
+						<label for="name">Nombre del Mundo (8max)</label>
+						<input type="text" id="name" maxlength="8" class="form-control"/>
+						<br/>
+						<button class="btn btn-success" id="saveWorldBtn"><span class="glyphicon glyphicon-ok"></span></button>
+					</form>
+				  </div>
+				  <div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				  </div>
+				</div>
+
+			</div>
+		</div>
+		
 		<!-- Second Icon -->
 		<div class="page" id="config">
 			<h1>Configuración</h1>

@@ -113,6 +113,30 @@ io.on('connection', (socket) => {
 		}
 	});
 	
+	socket.on('removeWorld', (data, answer) => {
+		console.log('removing world ' + data.id);
+		if(usersLogged.hasOwnProperty(data.user.nick) && usersLogged[data.user.nick].key == data.user.key)
+			dao.world.delete(data.id, answer);
+	});
+	
+	socket.on('createWorld', (data, answer) => {
+		console.log('creating world with name: ' + data.name + ' from user: ' + data.user.nick);
+		if(usersLogged.hasOwnProperty(data.user.nick) && usersLogged[data.user.nick].key == data.user.key)
+			dao.world.create(data, answer);
+	});
+	
+	socket.on('leaveWorld', (user, answer) => {
+		console.log('user: ' + user.nick + ' is leaving  his world');
+		if(usersLogged.hasOwnProperty(user.nick) && usersLogged[user.nick].key == user.key){
+			if(usersLogged[user.nick].worldId != null){
+				socket.leave(user.worldId);
+			}
+			usersLogged[user.nick].worldId = null;
+			answer(0);
+		} else {
+			answer(1);
+		}
+	});
 	socket.join('prueba');
 	io.in('prueba').emit('kk', 'kk');
 });
