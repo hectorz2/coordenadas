@@ -100,7 +100,7 @@ nav button {
 #worldList {
 	width: 100%;
 	height: 300px;
-	overflow-y: scroll;
+	overflow-y: auto;
 }
 
 .loader {
@@ -126,4 +126,42 @@ nav button {
   
 	text-align: left;
   
+}
+
+
+/* Coordinates */
+#tmp {
+	margin-top: 50px;
+	transition: 1s;
+}
+#tmp h1 {
+	text-center: center;
+}
+
+#worldPanel {
+	width: 90vw;
+	height: 85vh;
+	margin-left: 5vw;
+	margin-right: 5vw;
+	display: none;
+	transition: 1s;
+	margin-top: 50px;
+}
+
+#usersConnected {
+	height: 15vh;
+	overflow-y: auto;
+	background-color: AliceBlue;
+	border: 1px solid lightgray;
+}
+
+#usersConnected div.list-group div.list-group-item {
+	background-color: lightblue;
+}
+
+#coordinates {
+	height: 80vh;
+	background-color: white;
+	border: 1px solid lightgray;
+	overflow-y: auto;
 }

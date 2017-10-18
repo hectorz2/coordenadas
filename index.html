@@ -16,9 +16,26 @@
       require('./renderer.js');
     </script>
   
-    <title>Prueba</title>
+    <title>Main</title>
   </head>
   <body>
+	<!-- Connection Modal -->
+		<div id="connectionModal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<h3 class="modal-title" style="text-align: center">Conectando</h3>
+					</div>
+					<div class="modal-body" style="position: relative; height: 150px">
+						<div style="position: absolute; left: 33%; tranform: translate(-50%, 0);" class="loader"></div>
+					</div>				  
+				</div>
+			</div>
+		</div>
+	<!-- Modal End -->
+  
 	<nav class="container-fluid">
 		<div class="row">
 			<div class="col-xs-2">

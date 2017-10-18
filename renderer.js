@@ -24,7 +24,52 @@ function confirmDialog(confirmFunction, text) {
 		}).then(confirmFunction);
 }
 
+/*function receiveConnectionState(state) {
+	if(state)
+		connectedToWebsocket;
+	else
+		disconnectedFromWebsocket
+}		*/
+var connected = null;
+function disconnectedFromWebsocket() {
+	if(connected || connected == null){
+		connected = false;
+		swal('¡Estás desconectado del servidor! Te avisaremos cuando se conecte, espera...');
+		$('#connectionModal').modal({
+			backdrop: 'static',
+			keyboard: false
+		}).modal('show');
+	}
+}
+
+function connectedToWebsocket() {
+	if(!connected || connected == null){
+		connected = true;
+		$('#connectionModal').modal('hide');
+		swal('¡Estás conectado al servidor!');
+		if(userLogged != null && main.loggedUser() == null){
+			userLogged = null;
+			loadDiv('login');
+			$('#worlds').off('click');
+			$('#worlds').click(function(){loadDiv('login')});
+			$('#logout').css('display', 'none');
+			swal('Ups... Parece que hubo un error y tienes que iniciar sesión otra vez. Perdónanos')
+		}
+	}
+}
+
 $(document).ready(function(){
+	main.receiveConnectionStateFunction(function(state) {
+		if(state)
+			connectedToWebsocket();
+		else
+			disconnectedFromWebsocket();
+	});
+	if(!main.isConnected()){
+		disconnectedFromWebsocket();
+	}
+	
+	
 	//NAV BUTTONS
 	$('#close').click(function(){main.quit();});
 	$('#logout').click(logout);
@@ -159,7 +204,12 @@ function loadList(){
 					var $btnLeave = $('<button class="btn btn-warning"><span class="glyphicon glyphicon-log-out"></span></button>');
 					$btnLeave.click(function(){
 						confirmDialog(function(){
-							swal('click!');
+							main.leaveWorld(id, function(state){
+								var msg = state==0?'Saliste del mundo, te echarán de menos...':state==-1?'Saliste del mundo y como no quedó nadie dentro se ha borrado... :(':state1Msg;
+								var type = state!=1?'success':'error';
+								$('#world' + id).remove();
+								swal({title: msg, type: type});
+							});
 						}, 'Perderás el acceso al mundo y si no queda nadie... ¡Los datos serán borrados!');
 					});
 					$col3.append($btnLeave);
@@ -227,3 +277,6 @@ function saveWorld(){
 	
 }
 
+function leaveWorld(id){
+	
+}

@@ -10,6 +10,7 @@ const PORT = process.env.PORT || 3000;
 const INDEX = path.join(__dirname, 'index.html');
 
 const server = express()
+	.use((req, res) => res.sendFile(INDEX) )
   .listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 const io = socketIO(server);
@@ -106,10 +107,15 @@ io.on('connection', (socket) => {
 			}
 			usersLogged[user.nick].worldId = user.worldId;
 			socket.join(user.worldId);
+			console.log('users in this room: ' + io.sockets.adapter.rooms[user.worldId].length);
+			if(!worlds.hasOwnProperty(user.worldId))
+				worlds[user.worldId] = [];
+			if(worlds[user.worldId].indexOf(user.nick) == -1)
+				worlds[user.worldId].push(user.nick);
 			io.in(user.worldId).emit('worldConnection', user.nick);
-			answer(0);
+			answer(0, worlds[user.worldId]);
 		} else {
-			answer(1);
+			answer(1, null);
 		}
 	});
 	
@@ -128,11 +134,30 @@ io.on('connection', (socket) => {
 	socket.on('leaveWorld', (user, answer) => {
 		console.log('user: ' + user.nick + ' is leaving  his world');
 		if(usersLogged.hasOwnProperty(user.nick) && usersLogged[user.nick].key == user.key){
+			io.in(user.worldId).emit('worldDisconnection', user.nick);
 			if(usersLogged[user.nick].worldId != null){
 				socket.leave(user.worldId);
 			}
+			worlds[user.worldId].splice(worlds[user.worldId].indexOf(user.nick),1);
+			if(worlds[user.worldId].length == 0)
+				delete worlds[user.worldId];
+			
 			usersLogged[user.nick].worldId = null;
+			
 			answer(0);
+		} else {
+			answer(1);
+		}
+	});
+	
+	socket.on('leaveWorldForEver', (data, answer) => {
+		console.log('user: ' + data.user.nick + ' is leaving the world: ' + data.id + ' for ever');
+		if(usersLogged.hasOwnProperty(data.user.nick) && usersLogged[data.user.nick].key == data.user.key){
+			if(usersLogged[data.user.nick].worldId != null && usersLogged[data.user.nick].worldId == data.id){
+				socket.leave(data.user.worldId);
+				usersLogged[data.user.nick].worldId = null;
+			}
+			dao.world.leave(data, answer);
 		} else {
 			answer(1);
 		}

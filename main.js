@@ -13,6 +13,8 @@ const settings = require('electron-settings');
 
 const io = require('socket.io-client');
 const socket = io.connect('http://localhost:3000', {reconnect: true});
+/*const socket = io.connect('https://mc-coordhelper-server.herokuapp.com/',
+    {reconnect: true, transports : ['websocket'], path: '/socket.io'});*/
 
 var userLogged = {};
 // Keep a global reference of the window object, if you don't, the window will
@@ -21,6 +23,10 @@ var userLogged = {};
 
 var mainWindow = null;
 var coordinatesWindow = null;
+
+var connected = false;
+
+var sendConnectionState = '';
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 430, height: 500/*250*/, frame: false, icon: './img/icon.png'});
@@ -40,7 +46,9 @@ function createWindow () {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
+	coordinatesWindow.close();
     mainWindow = null;
+	
   });
 }
 
@@ -59,12 +67,7 @@ app.on('ready', function(){
 		mainWindow.reload();
 	});
 	
-	if(settings.has('userRemembered')){
-		userLogged.nick = settings.get('userRemembered');
-		if(settings.has('keyRemembered')){
-			userLogged.key = settings.get('keyRemembered');
-		}
-	}
+	
 	createWindow();
 });
 
@@ -97,22 +100,56 @@ app.on('before-quit', function(){
 
 socket.on('connect', function(){
 	console.log('connected to websocket server');
+	if(settings.has('userRemembered')){
+		userLogged.nick = settings.get('userRemembered');
+		if(settings.has('keyRemembered')){
+			userLogged.key = settings.get('keyRemembered');
+		}
+	}
+	connected = true;
 	if(userLogged != {})
 		socket.emit('getLoginState', userLogged, (state) => {
 			if(!state) userLogged = {}; 
+			if(sendConnectionState != '')
+				sendConnectionState(connected);
 		});
+	else 
+		if(sendConnectionState != '')
+			sendConnectionState(connected);
 });
 	
 socket.on('connect_error', function(error){
 	console.log('Server down. ' + error);
-	mainWindow.webContents.send('error', error); 
+	connected = false;
+	//mainWindow.webContents.send('error', error); 
 	userLogged = {};
-});
+
+	if(sendConnectionState != '')
+		sendConnectionState(connected);
 	
-/*socket.on('time', function(timeString) {
-	console.log('Server time: ' + timeString);
-	mainWindow.webContents.send('time', timeString); 
-});*/
+	if(coordinatesWindow != null)
+		coordinatesWindow.close();
+
+});
+
+socket.on('reconnect', function(attempNumber){
+	console.log('reconnected to websocket server');
+	
+	//TODO quitar loader
+});
+
+exports.receiveConnectionStateFunction = function(method){
+	sendConnectionState = method;
+}
+
+exports.connectionState = function(){
+	if(sendConnectionState != '')
+		sendConnectionState(connected);
+}
+
+exports.isConnected = function() {
+	return connected;
+}
 
 exports.quit = function(){
 	app.quit();
@@ -167,11 +204,12 @@ exports.loadList = function(answer){
 socket.on('kk', function(msg){
 	console.log('pruebee msg: ' + msg);
 });
-
+var connectedUsers = [];
 exports.selectWorld = function(worldId, answer){
 	console.log('selecting world: ' + worldId);
 	userLogged.worldId = worldId;
-	socket.emit('selectWorld', userLogged, function(state){
+	socket.emit('selectWorld', userLogged, function(state, usersConnected){
+		connectedUsers = usersConnected;
 		answer(state);
 		if(coordinatesWindow != null){
 			coordinatesWindow.close();
@@ -192,9 +230,20 @@ exports.selectWorld = function(worldId, answer){
 		// Dereference the window object, usually you would store windows
 		// in an array if your app supports multi windows, this is the time
 		// when you should delete the corresponding element.
+			console.log('closing coordinates window...');
 			coordinatesWindow = null;
+			
+			socket.emit('leaveWorld', userLogged, function(state){
+				coordinatesWindow = null;
+				userLogged.worldId = null;
+				console.log('world leaved with state: ' + state);
+			});
 		});
 	});
+}
+
+exports.getConnectedUsersFirstTime = function(){
+	return connectedUsers;
 }
 
 exports.removeWorld = function(worldId, answer){
@@ -217,11 +266,14 @@ exports.saveWorld = function(name, answer){
 }
 
 exports.closeCoordinates = function(){
-	console.log('closing coordinates window...');
-	userLogged.worldId = null;
 	coordinatesWindow.close();
-	socket.emit('leaveWorld', userLogged, function(state){
+}
+
+exports.leaveWorld = function(id, answer){
+	console.log('leaving world for ever...');
+	socket.emit('leaveWorldForEver', {user: userLogged, id: id}, function(state){
 		coordinatesWindow = null;
+		answer(state);
 		console.log('world leaved with state: ' + state);
 	});
 }

@@ -21,15 +21,53 @@
   <body>
 	  <nav class="container-fluid">
 			<div class="row">
+			<button onclick="location.reload();">R</button>
 				<div class="col-xs-2 col-xs-offset-10">
 					<button class="btn btn-danger pull-right" id="close"><span class="glyphicon glyphicon-remove"></span></button>
 				</div>
 			</div>
 		</nav>
-		<div id="tmp">
-		<h1>Cargando Coordenadas...</h1>
-		<div class="loader"></div>
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-4 col-xs-offset-2">
+					<div id="tmp">
+						<h1>Cargando...</h1>
+						<br/>
+						<div class="col-xs-4 col-xs-offset-4">
+							<div class="loader"></div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
-		<div id="coordinates"></div>
+		<div id="worldPanel">
+			<div id="usersConnected">
+				<div class="list-group" id="usersList">
+					
+				</div>
+			</div>
+			<div id="coordinates">
+				<ul id="tabs">
+					<li><a href="#tab1">Tab 1</a></li>
+					<li><a href="#tab2">Tab 2</a></li>
+					<li><a href="#tab3">Tab 3</a></li>
+					<li><a href="#tab1">Tab 1</a></li>
+					<li><a href="#tab2">Tab 2</a></li>
+					<li><a href="#tab3">Tab 3</a></li>
+					<li><a href="#tab1">Tab 1</a></li>
+					<li><a href="#tab2">Tab 2</a></li>
+					<li><a href="#tab3">Tab 3</a></li>
+				</ul>
+				<div id="tab1">
+					<h1>Cuack!</h1>
+				</div>
+				<div id="tab2">
+					<h1>Cuock!</h1>
+				</div>
+				<div id="tab3">
+					<h1>Cuuck!</h1>
+				</div>
+			</div>
+		</div>
   </body>
 </html>
