@@ -3,7 +3,7 @@
 // All of the Node.js APIs are available in this process.
 
 
-const remote = require('electron');
+const remote = require('electron').remote;
  
 const main = remote.require('./main.js');
 
@@ -32,7 +32,7 @@ function confirmDialog(confirmFunction, text) {
 }		*/
 let connected = null;
 function disconnectedFromWebsocket() {
-	if(connected || connected === null){
+	if(connected || connected == null){
 		connected = false;
 		swal('¡Estás desconectado del servidor! Te avisaremos cuando se conecte, espera...');
 		$('#connectionModal').modal({
@@ -43,11 +43,11 @@ function disconnectedFromWebsocket() {
 }
 
 function connectedToWebsocket() {
-	if(!connected || connected === null){
+	if(!connected || connected == null){
 		connected = true;
 		$('#connectionModal').modal('hide');
 		swal('¡Estás conectado al servidor!');
-		if(userLogged !== null && main.loggedUser() === null){
+		if(userLogged != null && main.loggedUser() == null){
 			userLogged = null;
 			loadDiv('login');
 			let $worlds = $('#worlds');
@@ -79,7 +79,7 @@ $(document).ready(function(){
 	//MAIN BUTTONS
     let $worlds = $('#worlds');
 	userLogged = main.loggedUser();
-	if(userLogged === null){
+	if(userLogged == null){
 		$worlds.click(function(){loadDiv('login')});
 		$logout.css('display', 'none');
 	}
@@ -132,7 +132,7 @@ function login(){
     let $pwd = $('#pwdL');
 	let nick = $nick.val();
 	let pwd = $pwd.val();
-	let remember = $('input[name=remember]:checked', '#loginForm').val();
+	let remember = parseInt($('input[name=remember]:checked', '#loginForm').val());
 	if(nick === '' || pwd === ''){
 		swal({title: 'Debes rellenar todos los campos', type: 'error'});
 	} else {
@@ -202,7 +202,7 @@ function loadList(){
 					let $col2 = $('<div class="col-xs-2" style="margin: 1%;"></div>');
 					let $btn = $('<button class="btn btn-info"><span class="glyphicon glyphicon-arrow-right"></span></button>');
 					$btn.click(function(){
-						main.selectWorld(id, function(state){
+						main.selectWorld(id, world.name, function(state){
 							if(state !== 0)
 								swal(state1Msg);
 						});

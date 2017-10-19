@@ -16,18 +16,24 @@
       require('./coordinates.js');
     </script>
   
-    <title>Prueba</title>
+    <title>Coordenadas</title>
   </head>
   <body>
-	  <nav class="container-fluid">
+    <nav class="container-fluid">
 			<div class="row">
-			<button onclick="location.reload();">R</button>
-				<div class="col-xs-2 col-xs-offset-10">
+			    <button onclick="location.reload();">R</button>
+				<div class="col-xs-5">
+					<h4 id="worldName"></h4>
+				</div>
+                <div class="col-xs-2">
+                    <button class="btn btn-info pull-right" id="worldActions"><span class="glyphicon glyphicon-wrench"></span></button>
+                </div>
+				<div class="col-xs-2 col-xs-offset-3">
 					<button class="btn btn-danger pull-right" id="close"><span class="glyphicon glyphicon-remove"></span></button>
 				</div>
 			</div>
-		</nav>
-		<div class="container">
+    </nav>
+    <div class="container">
 			<div class="row">
 				<div class="col-xs-4 col-xs-offset-2">
 					<div id="tmp">
@@ -39,13 +45,19 @@
 					</div>
 				</div>
 			</div>
-		</div>
-		<div id="worldPanel">
-			<div id="usersConnected">
+    </div>
+    <div id="worldPanel">
+			<!--<div id="usersConnected">
 				<div class="list-group" id="usersList">
 					
 				</div>
 			</div>
+
+			<div id="worldActions">
+				<div class="row">
+					<div class="col-xs-4"></div>
+				</div>
+			</div>-->
 			<div id="coordinates">
 				<ul id="tabs">
 					<li><a href="#tab1">Tab 1</a></li>
@@ -68,6 +80,37 @@
 					<h1>Cuuck!</h1>
 				</div>
 			</div>
-		</div>
+    </div>
+
+  <!-- MODALS -->
+    <!-- World Actions Modal -->
+    <div id="worldActionsModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title" style="text-align: center">Mantenimiento del mundo</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row" style="height: 100%">
+                        <div class="col-xs-7" style="border-right: 1px solid black;">
+                            <div class="list-group" id="usersList">
+
+                            </div>
+                        </div>
+                        <div class="col-xs-5">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal End -->
   </body>
 </html>

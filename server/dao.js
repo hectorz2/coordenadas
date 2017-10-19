@@ -204,6 +204,18 @@ module.exports = {
 					});
 				}
 			});
+		},
+
+		usersInWorld: function(id, callback) {
+			let sql = 'SELECT nick FROM user_world WHERE world = ?';
+			con.query(sql, [id], function(err, result){
+				if(err){
+					console.error(err);
+					callback(1, null);
+				} else {
+					callback(0, result);
+				}
+			});
 		}
 	}
 };

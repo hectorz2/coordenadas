@@ -165,3 +165,23 @@ nav button {
 	border: 1px solid lightgray;
 	overflow-y: auto;
 }
+
+#usersList {
+	overflow: auto;
+	height: 250px;
+}
+
+div.ball {
+	display: block;
+	width: 30px;
+	height: 30px;
+    background-color: red;
+	border-radius: 50%;
+	box-shadow: inset -4px -4px 6px rgba(0,0,0,.5);
+	background-image: -webkit-linear-gradient(-45deg, rgba(255,255,220,.2) 0%, transparent 100%);
+	background-image: -moz-linear-gradient(-45deg, rgba(255,255,220,.2) 0%, transparent 100%);
+	background-image: -o-linear-gradient(-45deg, rgba(255,255,220,.2) 0%, transparent 100%);
+	background-image: -ms-linear-gradient(-45deg, rgba(255,255,220,.2) 0%, transparent 100%);
+	transform: scale(0.8);
+    margin: 2px 4px 4px;
+}

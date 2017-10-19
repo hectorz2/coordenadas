@@ -109,13 +109,34 @@ io.on('connection', (socket) => {
 				worlds[user.worldId] = [];
 			if(worlds[user.worldId].indexOf(user.nick) === -1)
 				worlds[user.worldId].push(user.nick);
-			io.in(user.worldId).emit('worldConnection', user.nick);
-			answer(0, worlds[user.worldId]);
+			io.in(user.worldId).emit('worldConnection', user.nick); //TODO no se si esto lo usaré
+			answer(0);
 		} else {
-			answer(1, null);
+			answer(1);
 		}
 	});
-	
+
+	socket.on('usersInWorld', (user, answer) => {
+	    console.log('looking users in world: ' + user.worldId);
+	    if(userValidation(user)) {
+            dao.world.usersInWorld(user.worldId, function (state, users) {
+                if (state === 0) {
+                    console.log('users retrieved: ' + JSON.stringify(users));
+                    for (let thisUser in users) {
+                        if (users.hasOwnProperty(thisUser)) {
+                            users[thisUser].connected = worlds[user.worldId].indexOf(users[thisUser].nick) !== -1;
+                        }
+                    }
+                    answer(state, users);
+                } else {
+                    answer(state, null)
+                }
+            });
+        } else {
+	        answer(1, null);
+        }
+	});
+
 	socket.on('removeWorld', (data, answer) => {
 		console.log('removing world ' + data.id);
 		if(userValidation(data.user))
@@ -131,7 +152,7 @@ io.on('connection', (socket) => {
 	socket.on('leaveWorld', (user, answer) => {
 		console.log('user: ' + user.nick + ' is leaving  his world');
 		if(userValidation(user)){
-			io.in(user.worldId).emit('worldDisconnection', user.nick);
+			io.in(user.worldId).emit('worldDisconnection', user.nick); //TODO no se si esto lo usaré
 			if(usersLogged[user.nick].worldId !== null){
 				socket.leave(user.worldId);
 			}

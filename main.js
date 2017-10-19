@@ -85,14 +85,14 @@ app.on('ready', function(){
 app.on('activate', function () {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  if (mainWindow === null) {
+  if (mainWindow == null) {
     createWindow();
   }
 });
 
 app.on('before-quit', function(){
-	if(userLogged !== {})
-	socket.emit('quit', {nick: userLogged.nick});
+    if(!(Object.keys(userLogged).length === 0 && userLogged.constructor === Object))
+	    socket.emit('quit', {nick: userLogged.nick});
 });
 
 // In this file you can include the rest of your app's specific main process
@@ -109,12 +109,16 @@ socket.on('connect', function(){
 		}
 	}
 	connected = true;
-	if(userLogged !== {})
-		socket.emit('getLoginState', userLogged, (state) => {
-			if(!state) userLogged = {}; 
-			if(sendConnectionState !== '')
-				sendConnectionState(connected);
-		});
+	//if(userLogged !== {}) {
+    if(!(Object.keys(userLogged).length === 0 && userLogged.constructor === Object)){
+        console.log('user: ' + userLogged.nick + ' was renember, checking state...');
+        socket.emit('getLoginState', userLogged, (state) => {
+            console.log('server state of login: ' + state);
+            if (!state) userLogged = {};
+            if (sendConnectionState !== '')
+                sendConnectionState(connected);
+        });
+    }
 	else 
 		if(sendConnectionState !== '')
 			sendConnectionState(connected);
@@ -129,7 +133,7 @@ socket.on('connect_error', function(error){
 	if(sendConnectionState !== '')
 		sendConnectionState(connected);
 	
-	if(coordinatesWindow !== null)
+	if(coordinatesWindow != null)
 		coordinatesWindow.close();
 
 });
@@ -160,7 +164,7 @@ exports.register = function(nick, pwd, answer){
 
 
 exports.login = function(nick, pwd, remember, answer){
-	console.log('loging user ' + nick);
+	console.log('loging user ' + nick + ' remember: ' + remember);
 	socket.emit('login', {nick: nick, pwd: pwd, remember: remember}, (state, key) => {
 		if(state === 0){
 			userLogged = {
@@ -178,7 +182,7 @@ exports.login = function(nick, pwd, remember, answer){
 };
 
 exports.loggedUser = function(){
-	return userLogged==={}?null:userLogged.nick;
+	return (Object.keys(userLogged).length === 0 && userLogged.constructor === Object)?null:userLogged.nick;
 };
 
 exports.logout = function(answer){
@@ -199,18 +203,19 @@ exports.loadList = function(answer){
 socket.on('kk', function(msg){
 	console.log('pruebee msg: ' + msg);
 });
-let connectedUsers = [];
-exports.selectWorld = function(worldId, answer){
+let worldName = '';
+exports.selectWorld = function(worldId, selectedWorldName, answer){
 	console.log('selecting world: ' + worldId);
 	userLogged.worldId = worldId;
-	socket.emit('selectWorld', userLogged, function(state, usersConnected){
-		connectedUsers = usersConnected;
+	socket.emit('selectWorld', userLogged, function(state){
 		answer(state);
-		if(coordinatesWindow !== null){
+		if(coordinatesWindow != null){
 			coordinatesWindow.close();
 		}
+
+		worldName = selectedWorldName;
 		coordinatesWindow = new BrowserWindow({width: 400, height: 800, frame: false});
-		
+
 		coordinatesWindow.loadURL(url.format({
 		pathname: path.join(__dirname, 'coordinates.html'),
 		protocol: 'file:',
@@ -237,8 +242,14 @@ exports.selectWorld = function(worldId, answer){
 	});
 };
 
-exports.getConnectedUsersFirstTime = function(){
-	return connectedUsers;
+exports.getWorldName = function() {
+    return worldName;
+};
+
+exports.getUsersInWorld = function(answer){
+    socket.emit('usersInWorld', userLogged, function(state, users){
+        answer(state, users);
+    });
 };
 
 exports.removeWorld = function(worldId, answer){
