@@ -3,11 +3,11 @@
 // All of the Node.js APIs are available in this process.
 
 
-const {ipcRenderer, remote} = require('electron');
+const remote = require('electron');
  
 const main = remote.require('./main.js');
 
-var userLogged = null;
+let userLogged = null;
 
 const state1Msg = 'Hubo uno o varios problemas, inténtalo de nuevo más tarde o contacta con el administrador a través del correo hector.zaragoza.arranz@gmail.com, ¡no muerdo!';
 
@@ -30,9 +30,9 @@ function confirmDialog(confirmFunction, text) {
 	else
 		disconnectedFromWebsocket
 }		*/
-var connected = null;
+let connected = null;
 function disconnectedFromWebsocket() {
-	if(connected || connected == null){
+	if(connected || connected === null){
 		connected = false;
 		swal('¡Estás desconectado del servidor! Te avisaremos cuando se conecte, espera...');
 		$('#connectionModal').modal({
@@ -43,15 +43,16 @@ function disconnectedFromWebsocket() {
 }
 
 function connectedToWebsocket() {
-	if(!connected || connected == null){
+	if(!connected || connected === null){
 		connected = true;
 		$('#connectionModal').modal('hide');
 		swal('¡Estás conectado al servidor!');
-		if(userLogged != null && main.loggedUser() == null){
+		if(userLogged !== null && main.loggedUser() === null){
 			userLogged = null;
 			loadDiv('login');
-			$('#worlds').off('click');
-			$('#worlds').click(function(){loadDiv('login')});
+			let $worlds = $('#worlds');
+			$worlds.off('click');
+			$worlds.click(function(){loadDiv('login')});
 			$('#logout').css('display', 'none');
 			swal('Ups... Parece que hubo un error y tienes que iniciar sesión otra vez. Perdónanos')
 		}
@@ -72,17 +73,19 @@ $(document).ready(function(){
 	
 	//NAV BUTTONS
 	$('#close').click(function(){main.quit();});
-	$('#logout').click(logout);
+	let $logout = $('#logout');
+	$logout.click(logout);
 	
 	//MAIN BUTTONS
+    let $worlds = $('#worlds');
 	userLogged = main.loggedUser();
-	if(userLogged == null){
-		$('#worlds').click(function(){loadDiv('login')});
-		$('#logout').css('display', 'none');
+	if(userLogged === null){
+		$worlds.click(function(){loadDiv('login')});
+		$logout.css('display', 'none');
 	}
 	else {
 		$('.userName').html(userLogged);
-		$('#worlds').click(loadList);
+		$worlds.click(loadList);
 	}
 	$('#configBtn').click(function(){loadDiv('config')});
 	$('#helpBtn').click(function(){loadDiv('help')});
@@ -106,16 +109,18 @@ function loadDiv(divId){
 }
 
 function register(){
-	var nick = $('#nick').val();
-	var pwd = $('#pwd').val();
-	if(nick == '' || pwd == ''){
+    let $nick = $('#nick');
+    let $pwd = $('#pwd');
+	let nick = $nick.val();
+	let pwd = $pwd.val();
+	if(nick === '' || pwd === ''){
 		swal({title: 'Debe rellenar todos los campos', type: 'error'});
 	} else {
-	$('#nick').val('');
-	$('#pwd').val('');
+	    $nick.val('');
+	    $pwd.val('');
 		main.register(nick, pwd, function(state){
-			var msg = state==0?'Usuario Registrado Correctamente, ¡Corre, haz login!':state==1?state1Msg:'El nick ya existe, ¡Prueba otro!';
-			var type = state==0?'success':'error';
+			let msg = state===0?'Usuario Registrado Correctamente, ¡Corre, haz login!':state===1?state1Msg:'El nick ya existe, ¡Prueba otro!';
+			let type = state===0?'success':'error';
 			swal({title: msg, type: type});
 			loadDiv('login');
 		});
@@ -123,27 +128,30 @@ function register(){
 }
 
 function login(){
-	var nick = $('#nickL').val();
-	var pwd = $('#pwdL').val();
-	var remember = $('input[name=remember]:checked', '#loginForm').val();
-	if(nick == '' || pwd == ''){
+    let $nick = $('#nickL');
+    let $pwd = $('#pwdL');
+	let nick = $nick.val();
+	let pwd = $pwd.val();
+	let remember = $('input[name=remember]:checked', '#loginForm').val();
+	if(nick === '' || pwd === ''){
 		swal({title: 'Debes rellenar todos los campos', type: 'error'});
 	} else {
-		$('#nickL').val('');
-		$('#pwdL').val('');
+		$nick.val('');
+		$pwd.val('');
 		$('#remember').prop('checked', true);
 		$('#notRemember').prop('checked', false);
-		remember = remember==1?true:false;	
+		remember = remember===1;
 		main.login(nick, pwd, remember, function(state){
-			var msg = state==0?'Login correcto, ¡Diviértete!':state==1?state1Msg:'El nick no existe o te has confundido de contraseña...';
-			var type = state==0?'success':'error';
+			let msg = state===0?'Login correcto, ¡Diviértete!':state===1?state1Msg:'El nick no existe o te has confundido de contraseña...';
+			let type = state===0?'success':'error';
 			swal({title: msg, type: type});
-			if(state == 0){
+			if(state === 0){
 				userLogged = nick;
 				$('.userName').html(userLogged);
 				$('#logout').css('display', 'block');
-				$('#worlds').off('click');
-				$('#worlds').click(loadList);
+				let $worlds = $('#worlds');
+				$worlds.off('click');
+				$worlds.click(loadList);
 				loadList();
 			}
 		});
@@ -152,18 +160,18 @@ function login(){
 
 function logout(){
 	main.logout(function(state){
-		var msg = state==0?'Has hecho logout, te echaremos de menos...':state1Msg;	
-		var type = 'success';
-		if(state == 0){
+		let msg = state===0?'Has hecho logout, te echaremos de menos...':state1Msg;
+		let type = state===0?'success':'error';
+		if(state === 0){
 			$('#logout').css('display', 'none');
 			userLogged = null;
-			$('#worlds').off('click');
-			$('#worlds').click(function(){loadDiv('login')});
+            let $worlds = $('#worlds');
+			$worlds.off('click');
+			$worlds.click(function(){loadDiv('login')});
 			loadDiv('main');
 		} else {
 			type = 'error';
 		}
-		//alert(msg);
 		swal({title: msg, type: type});
 	});
 	
@@ -171,42 +179,43 @@ function logout(){
 
 function loadList(){
 	main.loadList(function(state, worlds){
-		var msg = state==0?'Carga Completada':state1Msg;	
-		var type = state==0?'success':'error';
-		if(state == 0){
+		let msg = state===0?'Carga Completada':state1Msg;
+		let type = state===0?'success':'error';
+        let $worldList = $('#worldList');
+        if(state === 0){
 			//console.log(worlds);
-			$('#worldList').html('');
+			$worldList.html('');
 			if(worlds.length > 0){
 				
 				//for(var i = 0; i < worlds.length; i += 1){
 				$.each(worlds, function(index, world){
-					console.log(JSON.stringify(world));
-					var id = world.id;
-					var $item = $('<div class="list-group-item" id="world' + id + '"></div>');
+					//console.log(JSON.stringify(world));
+					let id = world.id;
+					let $item = $('<div class="list-group-item" id="world' + id + '"></div>');
 					
-					var $row = $('<div class="row"></div>');
+					let $row = $('<div class="row"></div>');
 					
-					var $col1 = $('<div class="col-xs-4" style="margin: 3%;"></div>');
-					var $nombre = $('<span>' + world.name + '</span>');
+					let $col1 = $('<div class="col-xs-4" style="margin: 3%;"></div>');
+					let $nombre = $('<span>' + world.name + '</span>');
 					$col1.append($nombre);
 					
-					var $col2 = $('<div class="col-xs-2" style="margin: 1%;"></div>');
-					var $btn = $('<button class="btn btn-info"><span class="glyphicon glyphicon-arrow-right"></span></button>');
+					let $col2 = $('<div class="col-xs-2" style="margin: 1%;"></div>');
+					let $btn = $('<button class="btn btn-info"><span class="glyphicon glyphicon-arrow-right"></span></button>');
 					$btn.click(function(){
 						main.selectWorld(id, function(state){
-							if(state != 0)
+							if(state !== 0)
 								swal(state1Msg);
 						});
 					});
 					$col2.append($btn);
 					
-					var $col3 = $('<div class="col-xs-2" style="margin: 1%;"></div>');
-					var $btnLeave = $('<button class="btn btn-warning"><span class="glyphicon glyphicon-log-out"></span></button>');
+					let $col3 = $('<div class="col-xs-2" style="margin: 1%;"></div>');
+					let $btnLeave = $('<button class="btn btn-warning"><span class="glyphicon glyphicon-log-out"></span></button>');
 					$btnLeave.click(function(){
 						confirmDialog(function(){
 							main.leaveWorld(id, function(state){
-								var msg = state==0?'Saliste del mundo, te echarán de menos...':state==-1?'Saliste del mundo y como no quedó nadie dentro se ha borrado... :(':state1Msg;
-								var type = state!=1?'success':'error';
+								let msg = state===0?'Saliste del mundo, te echarán de menos...':state===-1?'Saliste del mundo y como no quedó nadie dentro se ha borrado... :(':state1Msg;
+								let type = state!==1?'success':'error';
 								$('#world' + id).remove();
 								swal({title: msg, type: type});
 							});
@@ -214,13 +223,13 @@ function loadList(){
 					});
 					$col3.append($btnLeave);
 					
-					var $col4 = $('<div class="col-xs-2" style="margin: 1%;"></div>');
-					var $btnRem = $('<button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>');
+					let $col4 = $('<div class="col-xs-2" style="margin: 1%;"></div>');
+					let $btnRem = $('<button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>');
 					$btnRem.click(function(){
 						confirmDialog(function(){
 							main.removeWorld(id, function(state){
-							var msg = state==0?'El mundo ha sido borrado':state1Msg;
-							var type = state==0?'success':'error';
+							let msg = state===0?'El mundo ha sido borrado':state1Msg;
+							let type = state===0?'success':'error';
 							$('#world' + id).remove();
 							
 							swal({title: msg, type: type});
@@ -239,12 +248,12 @@ function loadList(){
 					$row.append($col4);
 					
 					$item.append($row);
-					$('#worldList').append($item);
+					$worldList.append($item);
 				});
 					
 				//}
 			} else {
-				$('#worldList').html('<h1>Ups... No hay ningún mundo todavía... ¿Por qué no añades alguno?</h1>');
+				$worldList.html('<h1>Ups... No hay ningún mundo todavía... ¿Por qué no añades alguno?</h1>');
 			}
 			loadDiv('list');
 		} else
@@ -258,15 +267,16 @@ function addWorld(){
 	$('#addWorldModal').modal('show');
 }
 function saveWorld(){
-	if($('#name').val() == '')
+    let $name = $('#name');
+	if($name.val() === '')
 		swal({title: 'Debe rellenar todos los campos', type: 'error'});
 	else {
-		var name = $('#name').val();
-		$('#name').val('');
+		let name = $name.val();
+		$name.val('');
 		main.saveWorld(name, function(state){
-			var msg = state==0?'Mundo creado. ¡Puedes comenzar a guardar tus coordenadas!':state1Msg;
-			var type = state==0?'success':'error';
-			if(state == 0) {
+			let msg = state===0?'Mundo creado. ¡Puedes comenzar a guardar tus coordenadas!':state1Msg;
+			let type = state===0?'success':'error';
+			if(state === 0) {
 				loadList();
 				$('#addWorldModal').modal('hide');
 			}
@@ -274,9 +284,5 @@ function saveWorld(){
 			
 		});
 	}
-	
-}
-
-function leaveWorld(id){
 	
 }

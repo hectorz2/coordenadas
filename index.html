@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html>
   <head>
     <meta charset="UTF-8">
@@ -29,7 +30,7 @@
 						<h3 class="modal-title" style="text-align: center">Conectando</h3>
 					</div>
 					<div class="modal-body" style="position: relative; height: 150px">
-						<div style="position: absolute; left: 33%; tranform: translate(-50%, 0);" class="loader"></div>
+						<div style="position: absolute; left: 33%; transform: translate(-50%, 0);" class="loader"></div>
 					</div>				  
 				</div>
 			</div>
@@ -68,7 +69,7 @@
 				<h1>Registro</h1>
 				<form>
 					<label for="nick">Nick </label>
-					<input type="text" id="nick" class="form-control"/>
+					<input id="nick" class="form-control"/>
 					<label for="pwd">Password </label>
 					<input type="password" id="pwd" class="form-control"/>
 					<br/>
@@ -83,10 +84,11 @@
 				<h1>Login</h1>
 				<form id="loginForm">
 					<label for="nickL">Nick </label>
-					<input type="text" id="nickL" class="form-control"/>
+					<input id="nickL" class="form-control"/>
 					<label for="pwdL">Password </label>
 					<input type="password" id="pwdL" class="form-control"/> <br/>
 					<label for="remember">Recuérdame</label>
+					<!--suppress XmlDefaultAttributeValue -->
 					<input type="radio" name="remember" id="remember" value="1" checked="checked"/>
 					<label for="notRemember">No me recuerdes</label>
 					<input type="radio" name="remember" id="notRemember" value="0"/> <br/>
@@ -127,7 +129,7 @@
 				  <div class="modal-body">
 					<form id="addWorldForm" onsubmit="return false">
 						<label for="name">Nombre del Mundo (8max)</label>
-						<input type="text" id="name" maxlength="8" class="form-control"/>
+						<input id="name" maxlength="8" class="form-control"/>
 						<br/>
 						<button class="btn btn-success" id="saveWorldBtn"><span class="glyphicon glyphicon-ok"></span></button>
 					</form>

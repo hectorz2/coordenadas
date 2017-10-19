@@ -16,17 +16,17 @@ const socket = io.connect('http://localhost:3000', {reconnect: true});
 /*const socket = io.connect('https://mc-coordhelper-server.herokuapp.com/',
     {reconnect: true, transports : ['websocket'], path: '/socket.io'});*/
 
-var userLogged = {};
+let userLogged = {};
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 
 
-var mainWindow = null;
-var coordinatesWindow = null;
+let mainWindow = null;
+let coordinatesWindow = null;
 
-var connected = false;
+let connected = false;
 
-var sendConnectionState = '';
+let sendConnectionState = '';
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 430, height: 500/*250*/, frame: false, icon: './img/icon.png'});
@@ -57,11 +57,13 @@ function createWindow () {
 // Some APIs can only be used after this event occurs.
 app.on('ready', function(){
 	//Create global shortcuts
-	globalShortcut.register('CommandOrControl+Shift+C', () => {
+	// noinspection JSCheckFunctionSignatures
+    globalShortcut.register('CommandOrControl+Shift+C', () => {
 		console.log('CommandOrControl+Shift+C is pressed');
 	});
-	
-	globalShortcut.register('CommandOrControl+Shift+R', () => {
+
+	// noinspection JSCheckFunctionSignatures
+    globalShortcut.register('CommandOrControl+Shift+R', () => {
 		console.log('CommandOrControl+Shift+R is pressed');
 		
 		mainWindow.reload();
@@ -89,7 +91,7 @@ app.on('activate', function () {
 });
 
 app.on('before-quit', function(){
-	if(userLogged != {})
+	if(userLogged !== {})
 	socket.emit('quit', {nick: userLogged.nick});
 });
 
@@ -107,14 +109,14 @@ socket.on('connect', function(){
 		}
 	}
 	connected = true;
-	if(userLogged != {})
+	if(userLogged !== {})
 		socket.emit('getLoginState', userLogged, (state) => {
 			if(!state) userLogged = {}; 
-			if(sendConnectionState != '')
+			if(sendConnectionState !== '')
 				sendConnectionState(connected);
 		});
 	else 
-		if(sendConnectionState != '')
+		if(sendConnectionState !== '')
 			sendConnectionState(connected);
 });
 	
@@ -124,49 +126,43 @@ socket.on('connect_error', function(error){
 	//mainWindow.webContents.send('error', error); 
 	userLogged = {};
 
-	if(sendConnectionState != '')
+	if(sendConnectionState !== '')
 		sendConnectionState(connected);
 	
-	if(coordinatesWindow != null)
+	if(coordinatesWindow !== null)
 		coordinatesWindow.close();
 
 });
 
-socket.on('reconnect', function(attempNumber){
-	console.log('reconnected to websocket server');
-	
-	//TODO quitar loader
-});
-
 exports.receiveConnectionStateFunction = function(method){
 	sendConnectionState = method;
-}
+};
 
 exports.connectionState = function(){
-	if(sendConnectionState != '')
+	if(sendConnectionState !== '')
 		sendConnectionState(connected);
-}
+};
 
 exports.isConnected = function() {
 	return connected;
-}
+};
 
 exports.quit = function(){
 	app.quit();
-}
+};
 
 exports.register = function(nick, pwd, answer){
 	console.log('registering user ' + nick);
 	socket.emit('register', {nick: nick, pwd: pwd}, (state) => {
 		answer(state);
 	});
-}
+};
 
 
 exports.login = function(nick, pwd, remember, answer){
 	console.log('loging user ' + nick);
 	socket.emit('login', {nick: nick, pwd: pwd, remember: remember}, (state, key) => {
-		if(state == 0){
+		if(state === 0){
 			userLogged = {
 				nick: nick,
 				key: key,
@@ -179,11 +175,11 @@ exports.login = function(nick, pwd, remember, answer){
 		}
 		answer(state);
 	});
-}
+};
 
 exports.loggedUser = function(){
-	return userLogged=={}?null:userLogged.nick;
-}
+	return userLogged==={}?null:userLogged.nick;
+};
 
 exports.logout = function(answer){
 	settings.delete('userRemembered');
@@ -192,26 +188,25 @@ exports.logout = function(answer){
 		userLogged = {};
 		answer(state);
 	});
-}
+};
 
-var worldSocket = null;
 exports.loadList = function(answer){
 	socket.emit('worldList', userLogged, function(state, worlds){
 		answer(state, worlds);
 	});
-}
+};
 
 socket.on('kk', function(msg){
 	console.log('pruebee msg: ' + msg);
 });
-var connectedUsers = [];
+let connectedUsers = [];
 exports.selectWorld = function(worldId, answer){
 	console.log('selecting world: ' + worldId);
 	userLogged.worldId = worldId;
 	socket.emit('selectWorld', userLogged, function(state, usersConnected){
 		connectedUsers = usersConnected;
 		answer(state);
-		if(coordinatesWindow != null){
+		if(coordinatesWindow !== null){
 			coordinatesWindow.close();
 		}
 		coordinatesWindow = new BrowserWindow({width: 400, height: 800, frame: false});
@@ -240,11 +235,11 @@ exports.selectWorld = function(worldId, answer){
 			});
 		});
 	});
-}
+};
 
 exports.getConnectedUsersFirstTime = function(){
 	return connectedUsers;
-}
+};
 
 exports.removeWorld = function(worldId, answer){
 	console.log('removing world: ' + worldId);
@@ -254,7 +249,7 @@ exports.removeWorld = function(worldId, answer){
 		console.log('world removed');
 	});
 	
-}
+};
 
 exports.saveWorld = function(name, answer){
 	console.log('adding world with name: ' + name);
@@ -263,11 +258,11 @@ exports.saveWorld = function(name, answer){
 		answer(state);
 		console.log('world created');
 	});
-}
+};
 
 exports.closeCoordinates = function(){
 	coordinatesWindow.close();
-}
+};
 
 exports.leaveWorld = function(id, answer){
 	console.log('leaving world for ever...');
@@ -276,4 +271,4 @@ exports.leaveWorld = function(id, answer){
 		answer(state);
 		console.log('world leaved with state: ' + state);
 	});
-}
+};

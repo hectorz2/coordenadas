@@ -3,7 +3,7 @@
 // All of the Node.js APIs are available in this process.
 
 
-const {ipcRenderer, remote} = require('electron');
+const remote = require('electron');
  
 const main = remote.require('./main.js');
 
@@ -15,16 +15,16 @@ $(document).ready(function(){
 });
 
 function loadUsers(){
-	var users = main.getConnectedUsersFirstTime();
-	var $list = $('#usersList');
-	for(var i = 0; i < users.length; i += 1){
-		var $item = `<div class="list-group-item" id="user${users[i]}"><h6>${users[i]}<h6></div>`;
+	let users = main.getConnectedUsersFirstTime();
+	let $list = $('#usersList');
+	for(let i = 0; i < users.length; i += 1){
+		let $item = `<div class="list-group-item" id="user${users[i]}"><h6>${users[i]}<h6></div>`;
 		$list.append($item);
 	}
 }
 
 function loadCoordinates(){
-	$('#coordinates').tabs();
+    $('#coordinates').tabs();
 	$('#tmp').css('display', 'none');
 	$('#worldPanel').css('display', 'block');
 }
