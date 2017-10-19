@@ -26,7 +26,7 @@ con.on('error', function() {
 
 });
 */
-var db_config = {
+const db_config = {
   host: 'localhost',
   user: 'root',
   password: '',
@@ -37,7 +37,7 @@ var db_config = {
   database: 'heroku_c08b20a02df2679'*/
 };
 
-var con;
+let con;
 
 function handleDisconnect() {
 	con = mysql.createConnection(db_config); // Recreate the connection, since
@@ -65,22 +65,22 @@ handleDisconnect();
 module.exports = {
   user: {
 		register: function(user, answer){
-			var sqlCheck = 'SELECT * FROM users WHERE nick = ?'
+			let sqlCheck = 'SELECT * FROM users WHERE nick = ?';
 			con.query(sqlCheck, [user.nick], function(err, result){
 				console.log(result);
 				if (err) {
 					console.error(err);
 					answer(1);
-				} else if(result.length != 0){
+				} else if(result.length !== 0){
 					console.log('the nickname already exists');
 					answer(2);
 				} else {
-					var sql = 'INSERT INTO users SET ?';
-					var values = {
+					let sql = 'INSERT INTO users SET ?';
+					let values = {
 						nick: user.nick,
 						password: user.pwd
 					};
-					con.query(sql, values, function(err, result){
+					con.query(sql, values, function(err){
 						if (err) {
 							console.error(err);
 							answer(1);
@@ -94,13 +94,13 @@ module.exports = {
 			
 		}, 
 		login: function(user, callback){
-			var sql = 'SELECT * FROM users WHERE nick = ? and password = ?';
+			let sql = 'SELECT * FROM users WHERE nick = ? and password = ?';
 			con.query(sql, [user.nick, user.pwd], function(err, result){
 				console.log(result);
 				if (err) {
 					console.error(err);
 					callback(1);
-				} else if(result.length == 0){
+				} else if(result.length === 0){
 					console.log('the user doesn`t exists');
 					callback(2);
 				} else {
@@ -111,7 +111,7 @@ module.exports = {
 	},
 	world: {
 		list: function(nick, callback){
-			var sql = 'SELECT * FROM worlds WHERE id IN (SELECT world FROM user_world WHERE nick = ? AND accepted = 1) ORDER BY name';
+			let sql = 'SELECT * FROM worlds WHERE id IN (SELECT world FROM user_world WHERE nick = ? AND accepted = 1) ORDER BY name';
 			con.query(sql, [nick], function(err, result){
 				if(err){
 					console.log(err);
@@ -123,15 +123,15 @@ module.exports = {
 		},
 		
 		delete: function(id, callback){ //TODO tendrá que borrar tabs y coordenadas
-			var sql = 'DELETE FROM user_world WHERE world = ?';
-			con.query(sql, [id], function(err, result){
+			let sql = 'DELETE FROM user_world WHERE world = ?';
+			con.query(sql, [id], function(err){
 				if(err){
 					console.error(err);
 					callback(1);
 				} else {
 					console.log('relations deleted');
-					var sql = 'DELETE FROM worlds WHERE id = ?';
-					con.query(sql, [id], function(err, result){
+					let sql = 'DELETE FROM worlds WHERE id = ?';
+					con.query(sql, [id], function(err){
 						if(err){
 							console.error(err);
 							callback(1);
@@ -145,8 +145,8 @@ module.exports = {
 		}, 
 		
 		create: function(data, callback){
-			var sql = 'INSERT INTO worlds SET ?';
-			var values = {
+			let sql = 'INSERT INTO worlds SET ?';
+			let values = {
 				name: data.name
 			};
 			con.query(sql, values, function(err, result){ 
@@ -155,13 +155,13 @@ module.exports = {
 				callback(1);
 			} else {
 				console.log('world created with id: ' + result.insertId);
-				var sql = 'INSERT INTO user_world SET ?';
-				var values = {
+				let sql = 'INSERT INTO user_world SET ?';
+				let values = {
 					nick: data.user.nick,
 					world: result.insertId,
 					accepted: true
-				}
-				con.query(sql, values, function(err, result){
+				};
+				con.query(sql, values, function(err){
 					if (err) {
 						console.error(err);
 						callback(1);
@@ -176,24 +176,24 @@ module.exports = {
 		},
 		
 		leave: function(data, callback){
-			var sql = 'DELETE FROM user_world WHERE world = ? AND nick = ?';
-			con.query(sql, [data.id, data.user.nick], function(err, result){
+			let sql = 'DELETE FROM user_world WHERE world = ? AND nick = ?';
+			con.query(sql, [data.id, data.user.nick], function(err){
 				if(err){
 					console.error(err);
 					callback(1);
 				} else {
 					console.log('relation deleted');
-					var sql = 'SELECT * FROM user_world where world = ?';
+					let sql = 'SELECT * FROM user_world where world = ?';
 					con.query(sql, [data.id], function(err, result){
 						if(err){
 							console.error(err);
 							callback(1);
 						} else {
-							if(result.length == 0){
+							if(result.length === 0){
 								console.log('the world is empty of users, deleting');
 								module.exports.world.delete(data.id, function(state){
 									console.log('delete state: ' + state);
-									var stateChanged = state==0?-1:state;
+									let stateChanged = state===0?-1:state;
 									console.log('changed state to: ' + stateChanged);
 									callback(stateChanged);
 								});
