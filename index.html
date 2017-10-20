@@ -2,22 +2,22 @@
 
 <html>
   <head>
-    <meta charset="UTF-8">
-	<link rel="stylesheet" href="./lib/jquery-ui-1.12.1/jquery-ui.min.css"/>
-	<link rel="stylesheet" href="./lib/bootstrap-3.3.7/css/bootstrap.min.css"/>
-	<link rel="stylesheet" href="./lib/sweet-alert-6.10.1/sweetalert2.min.css"/>
-	<link rel="stylesheet" href="./css/style.css"/>
-	
-	<script> window.$ = window.jQuery = require('./lib/jquery-3.2.1.min.js');</script>
-	<script src="./lib/jquery-ui-1.12.1/jquery-ui.min.js"></script>
-	<script src="./lib/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-	<script src="./lib/sweet-alert-6.10.1/sweetalert2.all.min.js"></script>
-	
-	<script>
-      require('./renderer.js');
-    </script>
+	  <meta charset="UTF-8">
+	  <link rel="stylesheet" href="./lib/jquery-ui-1.12.1/jquery-ui.min.css"/>
+	  <link rel="stylesheet" href="./lib/bootstrap-3.3.7/css/bootstrap.min.css"/>
+	  <link rel="stylesheet" href="./lib/sweet-alert-6.10.1/sweetalert2.min.css"/>
+	  <link rel="stylesheet" href="./css/style.css"/>
+
+	  <script> window.$ = window.jQuery = require('./lib/jquery-3.2.1.min.js');</script>
+	  <script src="./lib/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+	  <script src="./lib/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+	  <script src="./lib/sweet-alert-6.10.1/sweetalert2.all.min.js"></script>
+	  <script src="./js/helper.js"></script>
+	  <script>
+      	require('./renderer.js');
+	  </script>
   
-    <title>Main</title>
+	  <title>Main</title>
   </head>
   <body>
 	<!-- Connection Modal -->
@@ -68,8 +68,8 @@
 			<div class="container">
 				<h1>Registro</h1>
 				<form>
-					<label for="nick">Nick </label>
-					<input id="nick" class="form-control"/>
+					<label for="nick">Nick (9 caracteres max.)</label>
+					<input id="nick" class="form-control" maxlength="9"/>
 					<label for="pwd">Password </label>
 					<input type="password" id="pwd" class="form-control"/>
 					<br/>
@@ -83,7 +83,7 @@
 			<div class="container">
 				<h1>Login</h1>
 				<form id="loginForm">
-					<label for="nickL">Nick </label>
+					<label for="nickL">Nick</label>
 					<input id="nickL" class="form-control"/>
 					<label for="pwdL">Password </label>
 					<input type="password" id="pwdL" class="form-control"/> <br/>
@@ -116,7 +116,7 @@
 		</div>
 		
 		<!-- Modals -->
-		<!-- Modal -->
+		<!-- addWorld Modal -->
 		<div id="addWorldModal" class="modal fade" role="dialog">
 			<div class="modal-dialog">
 
@@ -128,8 +128,8 @@
 				  </div>
 				  <div class="modal-body">
 					<form id="addWorldForm" onsubmit="return false">
-						<label for="name">Nombre del Mundo (8max)</label>
-						<input id="name" maxlength="8" class="form-control"/>
+						<label for="name">Nombre del Mundo (10 caracteres max.)</label>
+						<input id="name" maxlength="10" class="form-control"/>
 						<br/>
 						<button class="btn btn-success" id="saveWorldBtn"><span class="glyphicon glyphicon-ok"></span></button>
 					</form>
@@ -141,6 +141,29 @@
 
 			</div>
 		</div>
+
+        <!-- invitations Modal -->
+        <div id="invitationsModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">¡Tienes invitaciones nuevas!</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="list-group" id="invitationsList">
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
 		
 		<!-- Second Icon -->
 		<div class="page" id="config">

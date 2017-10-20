@@ -110,7 +110,7 @@ socket.on('connect', function(){
 	}
 	connected = true;
 	//if(userLogged !== {}) {
-    if(!(Object.keys(userLogged).length === 0 && userLogged.constructor === Object)){
+    if(!(Object.keys(userLogged).length === 0 && userLogged.constructor === Object && trolled)){
         console.log('user: ' + userLogged.nick + ' was renember, checking state...');
         socket.emit('getLoginState', userLogged, (state) => {
             console.log('server state of login: ' + state);
@@ -200,6 +200,24 @@ exports.loadList = function(answer){
 	});
 };
 
+exports.checkForInvitations = function(answer){
+    socket.emit('checkForInvitations', userLogged, function(state, invitations){
+        answer(state, invitations);
+    });
+};
+
+exports.acceptInvitation = function(worldId, answer){
+    socket.emit('acceptInvitation', {user: userLogged, worldId: worldId}, function(state, invitations){
+        answer(state, invitations);
+    });
+};
+
+exports.denyInvitation = function(worldId, answer){
+    socket.emit('denyInvitation', {user: userLogged, worldId: worldId}, function(state, invitations){
+        answer(state, invitations);
+    });
+};
+
 socket.on('kk', function(msg){
 	console.log('pruebee msg: ' + msg);
 });
@@ -214,7 +232,7 @@ exports.selectWorld = function(worldId, selectedWorldName, answer){
 		}
 
 		worldName = selectedWorldName;
-		coordinatesWindow = new BrowserWindow({width: 400, height: 800, frame: false});
+		coordinatesWindow = new BrowserWindow({width: 500, height: 800, frame: false});
 
 		coordinatesWindow.loadURL(url.format({
 		pathname: path.join(__dirname, 'coordinates.html'),
@@ -249,6 +267,24 @@ exports.getWorldName = function() {
 exports.getUsersInWorld = function(answer){
     socket.emit('usersInWorld', userLogged, function(state, users){
         answer(state, users);
+    });
+};
+
+exports.getPendingUsersInWorld = function(answer){
+    socket.emit('pendingUsersInWorld', userLogged, function(state, users){
+        answer(state, users);
+    });
+};
+
+exports.inviteUserToWorld = function(nick, answer) {
+    socket.emit('inviteUserToWorld', {user: userLogged, nick: nick}, function(state){
+        answer(state);
+    });
+};
+
+exports.deleteInvitationToWorld = function(nick, answer) {
+    socket.emit('deleteInvitationToWorld', {user: userLogged, nick: nick}, function(state){
+        answer(state);
     });
 };
 

@@ -64,7 +64,8 @@ handleDisconnect();
 
 module.exports = {
   user: {
-		register: function(user, answer){
+
+      register: function(user, answer){
 			let sqlCheck = 'SELECT * FROM users WHERE nick = ?';
 			con.query(sqlCheck, [user.nick], function(err, result){
 				console.log(result);
@@ -92,8 +93,9 @@ module.exports = {
 				}
 			});
 			
-		}, 
-		login: function(user, callback){
+		},
+
+      login: function(user, callback){
 			let sql = 'SELECT * FROM users WHERE nick = ? and password = ?';
 			con.query(sql, [user.nick, user.pwd], function(err, result){
 				console.log(result);
@@ -107,8 +109,44 @@ module.exports = {
 					callback(0);
 				}
 			});
-		}
-	},
+		},
+
+      checkForInvitations: function(user, callback){
+          let sql = 'SELECT * FROM worlds WHERE id IN (SELECT world FROM user_world WHERE nick = ? AND accepted = 0) ORDER BY name';
+          con.query(sql, [user.nick], function(err, result){
+              if (err) {
+                  console.error(err);
+                  callback(1);
+              } else {
+                  callback(0, result.length===0?null:result);
+              }
+          });
+      },
+
+      acceptInvitation: function(data, callback){
+          let sql = 'UPDATE user_world SET accepted = 1 WHERE world = ? AND nick = ?';
+          con.query(sql, [data.worldId, data.nick], function(err){
+              if (err) {
+                  console.error(err);
+                  callback(1);
+              } else {
+                  callback(0);
+              }
+          });
+      },
+
+      denyInvitation: function(data, callback){
+          let sql = 'DELETE FROM user_world WHERE world = ? AND nick = ?';
+          con.query(sql, [data.worldId, data.nick], function(err){
+              if (err) {
+                  console.error(err);
+                  callback(1);
+              } else {
+                  callback(0);
+              }
+          });
+      },
+  },
 	world: {
 		list: function(nick, callback){
 			let sql = 'SELECT * FROM worlds WHERE id IN (SELECT world FROM user_world WHERE nick = ? AND accepted = 1) ORDER BY name';
@@ -207,7 +245,7 @@ module.exports = {
 		},
 
 		usersInWorld: function(id, callback) {
-			let sql = 'SELECT nick FROM user_world WHERE world = ?';
+			let sql = 'SELECT nick FROM user_world WHERE world = ? AND accepted = 1';
 			con.query(sql, [id], function(err, result){
 				if(err){
 					console.error(err);
@@ -216,6 +254,64 @@ module.exports = {
 					callback(0, result);
 				}
 			});
-		}
+		},
+
+        pendingUsersInWorld: function(id, callback) {
+		    let sql = 'SELECT nick FROM user_world WHERE world = ? AND accepted = 0';
+            con.query(sql, [id], function(err, result){
+                if(err){
+                    console.error(err);
+                    callback(1, null);
+                } else {
+                    callback(0, result);
+                }
+            });
+        },
+
+        inviteUserToWorld: function(data, callback) {
+		    let sql = 'SELECT * FROM users WHERE nick = ?';
+		    con.query(sql, [data.nick], function(err, result) {
+		        if(err) {
+                    console.error(err);
+                    callback(1);
+                } else if(result.length === 1){
+		        	let sql = 'SELECT * FROM user_world WHERE nick = ? AND world = ?';
+                    con.query(sql, [data.nick, data.worldId], function(err, result) {
+                        if(err) {
+                            callback(1);
+                        } else if (result.length === 1) {
+                            callback(3);
+                        } else {
+                            let sql = 'INSERT INTO user_world SET ?';
+                            let values = {
+                                nick: data.nick,
+                                world: data.worldId,
+                                accepted: 0
+                            };
+                            con.query(sql, values, function (err) {
+                                if (err) {
+                                    console.error(err);
+                                    callback(1);
+                                } else {
+                                    callback(0);
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    callback(2);
+                }
+            });
+        },
+        deleteInvitationToWorld: function(data, callback){
+            let sql = 'DELETE FROM user_world WHERE world = ? AND nick = ?';
+            con.query(sql, [data.worldId, data.nick], function(err){
+                if(err){
+                    callback(1);
+                } else {
+                    callback(0);
+                }
+            });
+        }
 	}
 };

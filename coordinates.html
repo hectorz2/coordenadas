@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
-	<link rel="stylesheet" href="./lib/jquery-ui-1.12.1/jquery-ui.min.css"/>
-	<link rel="stylesheet" href="./lib/bootstrap-3.3.7/css/bootstrap.min.css"/>
-	<link rel="stylesheet" href="./lib/sweet-alert-6.10.1/sweetalert2.min.css"/>
-	<link rel="stylesheet" href="./css/style.css"/>
-	
-	<script> window.$ = window.jQuery = require('./lib/jquery-3.2.1.min.js');</script>
-	<script src="./lib/jquery-ui-1.12.1/jquery-ui.min.js"></script>
-	<script src="./lib/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-	<script src="./lib/sweet-alert-6.10.1/sweetalert2.all.min.js"></script>
-	
-	<script>
-      require('./coordinates.js');
-    </script>
-  
-    <title>Coordenadas</title>
+      <meta charset="UTF-8">
+      <link rel="stylesheet" href="./lib/jquery-ui-1.12.1/jquery-ui.min.css"/>
+      <link rel="stylesheet" href="./lib/bootstrap-3.3.7/css/bootstrap.min.css"/>
+      <link rel="stylesheet" href="./lib/sweet-alert-6.10.1/sweetalert2.min.css"/>
+      <link rel="stylesheet" href="./css/style.css"/>
+
+      <script> window.$ = window.jQuery = require('./lib/jquery-3.2.1.min.js');</script>
+      <script src="./lib/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+      <script src="./lib/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+      <script src="./lib/sweet-alert-6.10.1/sweetalert2.all.min.js"></script>
+      <script src="./js/helper.js"></script>
+      <script>
+          require('./coordinates.js');
+      </script>
+
+      <title>Coordenadas</title>
   </head>
   <body>
     <nav class="container-fluid">
@@ -95,13 +95,31 @@
                 </div>
                 <div class="modal-body">
                     <div class="row" style="height: 100%">
-                        <div class="col-xs-7" style="border-right: 1px solid black;">
+                        <div class="col-xs-6" style="border-right: 1px solid black;">
                             <div class="list-group" id="usersList">
 
                             </div>
                         </div>
-                        <div class="col-xs-5">
+                        <div class="col-xs-4 col-xs-offset-1">
+                            <div class="row" style="border-bottom: 1px solid black">
+                                <h6 style="border-bottom: 1px solid black; text-align: center">Usuarios pendientes</h6>
+                                <div class="list-group" id="pendingUsersList">
 
+                                </div>
+                            </div>
+                            <div class="row" id="inviteUsers" >
+
+                                <div class="row">
+                                    <div class="col-xs-8">
+                                         <h6>Invitar Usuario</h6>
+                                    </div>
+                                    <div class="col-xs-1">
+                                        <button class="btn btn-info" id="inviteUserBtn" style="margin-top: 8px"><span class="glyphicon glyphicon-envelope"></span></button>
+                                    </div>
+                                </div>
+                                <label for="nickOfUser">Nick</label>
+                                <input id="nickOfUser" class="form-control"/>
+                            </div>
                         </div>
                     </div>
                 </div>

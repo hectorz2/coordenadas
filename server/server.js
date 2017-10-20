@@ -117,7 +117,7 @@ io.on('connection', (socket) => {
 	});
 
 	socket.on('usersInWorld', (user, answer) => {
-	    console.log('looking users in world: ' + user.worldId);
+	    console.log('looking for users in world: ' + user.worldId);
 	    if(userValidation(user)) {
             dao.world.usersInWorld(user.worldId, function (state, users) {
                 if (state === 0) {
@@ -136,6 +136,81 @@ io.on('connection', (socket) => {
 	        answer(1, null);
         }
 	});
+
+    socket.on('pendingUsersInWorld', (user, answer) => {
+        console.log('looking for pending users in world: ' + user.worldId);
+        if(userValidation(user)) {
+            dao.world.pendingUsersInWorld(user.worldId, function (state, users) {
+                if (state === 0) {
+                    console.log('users retrieved: ' + JSON.stringify(users));
+                    answer(state, users);
+                } else {
+                    answer(state, null)
+                }
+            });
+        } else {
+            answer(1, null);
+        }
+    });
+
+    socket.on('inviteUserToWorld', (data, answer) => {
+        console.log('inviting user: ' + data.nick + ' to world: ' + data.user.worldId);
+        if(userValidation(data.user)) {
+            dao.world.inviteUserToWorld({worldId: data.user.worldId, nick: data.nick}, function (state) {
+                answer(state);
+            });
+        } else {
+            answer(1);
+        }
+    });
+
+    socket.on('deleteInvitationToWorld', (data, answer) => {
+        console.log('deleting invitation of user: ' + data.nick + ' to world: ' + data.user.worldId);
+        if(userValidation(data.user)) {
+            dao.world.deleteInvitationToWorld({worldId: data.user.worldId, nick: data.nick}, function (state) {
+                answer(state);
+            });
+        } else {
+            answer(1);
+        }
+    });
+
+    socket.on('checkForInvitations', (user, answer) => {
+        console.log('checking for invitations of user: ' + user.nick);
+        if(userValidation(user)){
+            dao.user.checkForInvitations(user, function(state, invitations){
+               if(state === 0){
+                   answer(state, invitations);
+               }  else {
+                   answer(state, null);
+               }
+            });
+        } else {
+            answer(1, null);
+        }
+    });
+
+    socket.on('acceptInvitation', (data, answer) => {
+        console.log('accepting invitation of user: ' + data.user.nick + ' in world: ' + data.worldId);
+        if(userValidation(data.user)){
+            dao.user.acceptInvitation({nick: data.user.nick, worldId: data.worldId}, function(state){
+                answer(state);
+            });
+        } else {
+            answer(1);
+        }
+    });
+
+    socket.on('denyInvitation', (data, answer) => {
+        console.log('denying invitation of user: ' + data.user.nick + ' in world: ' + data.worldId);
+        if(userValidation(data.user)){
+            dao.user.denyInvitation({nick: data.user.nick, worldId: data.worldId}, function(state){
+                answer(state);
+            });
+        } else {
+            answer(1);
+        }
+    });
 
 	socket.on('removeWorld', (data, answer) => {
 		console.log('removing world ' + data.id);

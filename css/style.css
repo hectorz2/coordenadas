@@ -171,6 +171,11 @@ nav button {
 	height: 250px;
 }
 
+#pendingUsersList {
+    overflow: auto;
+    height: 125px;
+}
+
 div.ball {
 	display: block;
 	width: 30px;

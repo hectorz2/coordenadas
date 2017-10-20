@@ -9,21 +9,8 @@ const main = remote.require('./main.js');
 
 let userLogged = null;
 
-const state1Msg = 'Hubo uno o varios problemas, inténtalo de nuevo más tarde o contacta con el administrador a través del correo hector.zaragoza.arranz@gmail.com, ¡no muerdo!';
 
-function confirmDialog(confirmFunction, text) {
-	swal({
-		title: '¿Está seguro de realizar esta operación?',
-		text: text,
-		type: 'warning',
-		showCancelButton: true,
-		confirmButtonColor: '#3085d6',
-		cancelButtonColor: '#d33',
-		confirmButtonText: 'Sí, estoy seguro',
-		cancelButtonText: 'No, sácame de aquí'
-		}).then(confirmFunction);
-}
-
+let reloadWorldListOnModalClose = false;
 /*function receiveConnectionState(state) {
 	if(state)
 		connectedToWebsocket;
@@ -86,6 +73,7 @@ $(document).ready(function(){
 	else {
 		$('.userName').html(userLogged);
 		$worlds.click(loadList);
+		//checkForInvitations();
 	}
 	$('#configBtn').click(function(){loadDiv('config')});
 	$('#helpBtn').click(function(){loadDiv('help')});
@@ -97,7 +85,78 @@ $(document).ready(function(){
 	
 	$('#addWorldBtn').click(addWorld);
 	$('#saveWorldBtn').click(saveWorld);
+
+    $('#invitationsModal').on('hidden.bs.modal', function () {
+        if(reloadWorldListOnModalClose)
+            loadList();
+    })
 });
+
+function checkForInvitations(){
+	main.checkForInvitations(function(state, invitations){
+        let msg = state === 0 ? 'Invitaciones cargadas correctamente' : state1Msg;
+        let type = state === 0 ? 'success' : 'error';
+
+	    if(state === 0) {
+            if (invitations != null) {
+                reloadWorldListOnModalClose = false;
+                let $invitationsModal = $('#invitationsModal');
+                let $list = $('#invitationsList');
+                $list.empty();
+                $.each(invitations, function (index, invitation) {
+                    let $item = $(`<div class="list-group-item" id="${invitation.id}invitation"></div>`);
+
+                    let $row = $('<div class="row"></div>');
+                    let $worldName = $(`<div class="col-xs-4">${invitation.name}</div>`);
+
+                    let $acceptCol = $(`<div class="col-xs-2"></div>`);
+                    let $acceptBtn = $('<button class="btn btn-success"><span class="glyphicon glyphicon-ok-circle"></span></button>');
+                    $acceptBtn.click(function () {
+                        main.acceptInvitation(invitation.id, function (state) {
+                            let msg = state === 0 ? '¡Ahora formas parte del mundo!' : state1Msg;
+                            let type = state === 0 ? 'success' : 'error';
+                            swal({title: msg, type: type});
+                            if (state === 0) {
+                                reloadWorldListOnModalClose = true;
+                                $(`#${invitation.id}invitation`).remove();
+                                if($list.children().length === 0){
+                                    $invitationsModal.modal('hide');
+                                }
+                            }
+                        });
+                    });
+                    $acceptCol.append($acceptBtn);
+
+                    let $denyCol = $(`<div class="col-xs-2"></div>`);
+                    let $denyBtn = $('<button class="btn btn-danger"><span class="glyphicon glyphicon-remove-circle"></span></button>');
+                    $denyBtn.click(function () {
+                        main.denyInvitation(invitation.id, function (state) {
+                            let msg = state === 0 ? 'Has rechazado la invitación' : state1Msg;
+                            let type = state === 0 ? 'success' : 'error';
+                            swal({title: msg, type: type});
+                            if (state === 0) {
+                                $(`#${invitation.id}invitation`).remove();
+                                if($list.children().length === 0){
+                                    $invitationsModal.modal('hide');
+                                }
+                            }
+                        });
+                    });
+                    $denyCol.append($denyBtn);
+
+                    $row.append($worldName);
+                    $row.append($acceptCol);
+                    $row.append($denyCol);
+                    $item.append($row);
+                    $list.append($item);
+                });
+                $('#invitationsModal').modal('show');
+            }
+        } else {
+            swal({title: msg, type: type});
+        }
+	});
+}
 
 function loadDiv(divId){
 	$('.page').css({
@@ -115,16 +174,18 @@ function register(){
 	let pwd = $pwd.val();
 	if(nick === '' || pwd === ''){
 		swal({title: 'Debe rellenar todos los campos', type: 'error'});
-	} else {
-	    $nick.val('');
-	    $pwd.val('');
-		main.register(nick, pwd, function(state){
-			let msg = state===0?'Usuario Registrado Correctamente, ¡Corre, haz login!':state===1?state1Msg:'El nick ya existe, ¡Prueba otro!';
-			let type = state===0?'success':'error';
-			swal({title: msg, type: type});
-			loadDiv('login');
-		});
-	}
+	} else if(nick.split(' ').length > 1) {
+        swal({title: 'El nick no debe contener espacios', type: 'error'});
+    } else {
+            $nick.val('');
+            $pwd.val('');
+            main.register(nick, pwd, function(state){
+                let msg = state===0?'Usuario Registrado Correctamente, ¡Corre, haz login!':state===1?state1Msg:'El nick ya existe, ¡Prueba otro!';
+                let type = state===0?'success':'error';
+                swal({title: msg, type: type});
+                loadDiv('login');
+            });
+    }
 }
 
 function login(){
@@ -224,7 +285,7 @@ function loadList(){
 					$col3.append($btnLeave);
 					
 					let $col4 = $('<div class="col-xs-2" style="margin: 1%;"></div>');
-					let $btnRem = $('<button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>');
+					let $btnRem = $('<button class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span></button>');
 					$btnRem.click(function(){
 						confirmDialog(function(){
 							main.removeWorld(id, function(state){
@@ -256,6 +317,7 @@ function loadList(){
 				$worldList.html('<h1>Ups... No hay ningún mundo todavía... ¿Por qué no añades alguno?</h1>');
 			}
 			loadDiv('list');
+			checkForInvitations();
 		} else
 			swal({title: msg, type: type});
 		
