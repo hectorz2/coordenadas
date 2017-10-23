@@ -1,0 +1,103 @@
+{
+  "general": {
+    "state1Msg": "Hubo uno o varios problemas, inténtalo de nuevo más tarde o contacta con el administrador a través del correo hector.zaragoza.arranz@gmail.com, ¡no muerdo!",
+    "confirmation": {
+      "title": "¿Está seguro de realizar la operación?",
+      "okBtn": "Sí, estoy seguro",
+      "cancelBtn": "No, sácame de aquí"
+    }
+  },
+  "main": {
+    "nav": {
+      "logout": "Salir"
+    },
+    "disconnection": {
+      "title": "Conectando...",
+      "disconnectionAdvice": "¡Estás desconectado del servidor! Te avisaremos cuando se conecte, espera...",
+      "connectionAdvice": "¡Estás conectado al servidor!",
+      "loginAgainError": "Ups... Parece que hubo un error y tienes que iniciar sesión otra vez. Perdónanos."
+    },
+    "main": {
+      "worlds": "Mundos",
+      "settings": "Ajustes",
+      "help": "Ayuda"
+    },
+    "login": {
+      "title": "Acceder",
+      "nickLbl": "Nick",
+      "passwordLbl": "Password",
+      "remember": "Recuérdame",
+      "notRemember": "No me recuerdes",
+      "loginBtn": "Entrar",
+      "notRegistered": "¿No estás registrado?",
+      "notRegisteredBtn": "Regístrate",
+      "fillFieldsError": "Debe rellenar todos los campos.",
+      "wrongUserOrPasswordError": "El nick no existe o te has confundido de contraseña...",
+      "loginDone": "Login correcto. ¡Diviértete!"
+    },
+    "register": {
+      "title": "Registro",
+      "nickLbl": "Nick (9 caracteres como max.)",
+      "passwordLbl": "Password",
+      "registerBtn": "Registrar",
+      "fillFieldsError": "Debe rellenar todos los campos.",
+      "nickAlreadyExistsError": "El nick ya existe, ¡Prueba otro!",
+      "nickHasSpacesError": "El nick no debe contener espacios.",
+      "registerDone": "Usuario registrado correctamente, ¡Corre, haz login!",
+      "okBtn": "OK"
+    },
+    "logout": {
+      "logoutDone": "Has hecho logout, te echaremos de menos..."
+    },
+    "worldList": {
+      "greeting": "Hola",
+      "leaveWorldAdvice": "Perderás el acceso al mundo y si no queda nadie... ¡Los datos serán borrados!",
+      "leaveWorldDone": "Saliste del mundo, te echarán de menos...",
+      "leaveWorldAndDeletedDone": "Saliste del mundo y como no quedó nadie dentro se ha borrado... :(",
+      "deleteWorldAdvice": "Borrarás todos los datos del mundo a los demás. Si solo deseas salir, ¡Utiliza el otro botón!",
+      "deleteWorldDone": "El mundo ha sido borrado.",
+      "noWorldsYet": "Ups... No hay ningún mundo todavía... ¿Por qué no añades alguno?",
+      "createWorldTitle": "Añadir Mundo",
+      "nameLbl": "Nombre del mundo (10 caracteres max.)",
+      "createWorldCloseBtn": "Cerrar",
+      "fillFieldsError": "Debe rellenar todos los campos.",
+      "createWorldDone": "Mundo creado. ¡Puedes comenzar a guardar tus coordenadas!",
+      "invitationsTitle": "¡Tienes invitaciones nuevas!",
+      "invitationsAcceptDone": "¡Ahora formas parte del mundo!",
+      "invitationsDenyDone": "Has rechazado la invitación.",
+      "invitationsCloseBtn": "Cerrar"
+    },
+    "settings": {
+      "title": "Configuración",
+      "languaje": "Idioma",
+      "languajeChangeAdvice": "¿Está seguro de que desea cambiar el idioma? El programa se reiniciará."
+    }
+  },
+  "coordinates": {
+    "worldActions": {
+      "title": "Mantenimiento del mundo",
+      "pendingUsers": "Usuarios Pendientes",
+      "nickLbl": "Nick",
+      "inviteUser": "Invitar Usuario",
+      "fillFieldsError": "El nick no puede estar vacío.",
+      "nickHasSpacesError": "El nick no debe contener espacios.",
+      "userNotExists": "El usuario no existe.",
+      "userWasAlreadyInvited": "El usuario ya está en el mundo o ya está invitado.",
+      "inviteUserDone": "Usuario invitado correctamente.",
+      "deleteInvitationAdvice": "El usuario perderá la invitación.",
+      "deleteInvitationDone": "Invitación cancelada correctamente.",
+      "closeBtn": "Cerrar"
+    },
+    "loading": {
+      "loading": "Cargando..."
+    },
+    "coordinates": {
+      "createGroup": "Añadir Grupo",
+      "createGroupTitle": "Crear nuevo grupo",
+      "createGroupCloseBtn": "Cerrar",
+      "groupNameLbl": "Nombre del grupo (10 caracteres max.)",
+      "createGroupFillFieldsError": "El nombre del grupo no puede estar vacío.",
+      "createGroupBtn": "Crear"
+    }
+  }
+}

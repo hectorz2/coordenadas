@@ -33,9 +33,11 @@ function userValidation(user){
 
 
 io.on('connection', (socket) => {
-	
+	let socketUser = null;
 	console.log('Client connected');
-	socket.on('disconnect', () => console.log('Client disconnected'));
+	socket.on('disconnect', () => {
+		console.log('Client disconnected');
+    });
 	socket.on('getLoginState', (user, answer) => {
 		answer(userValidation(user));
 	});
@@ -58,6 +60,7 @@ io.on('connection', (socket) => {
 					key: key
 				};
 				console.log('saving login: ' + usersLogged[user.nick].toString());
+				socketUser = user.nick;
 				answer(state, key);
 			} else {
 				answer(state, null);
@@ -70,6 +73,7 @@ io.on('connection', (socket) => {
 		if(userValidation(user)){
 			delete usersLogged[user.nick];
 			console.log('done');
+			socketUser = null;
 			answer(0);
 		} else {
 			console.log('there was an error');

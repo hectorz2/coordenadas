@@ -33,11 +33,12 @@
 				</div>
 			</div>
     </nav>
+    <renderSection data-section="loading">
     <div class="container">
 			<div class="row">
 				<div class="col-xs-4 col-xs-offset-2">
 					<div id="tmp">
-						<h1>Cargando...</h1>
+						<h1><render>loading</render></h1>
 						<br/>
 						<div class="col-xs-4 col-xs-offset-4">
 							<div class="loader"></div>
@@ -46,44 +47,69 @@
 				</div>
 			</div>
     </div>
+    </renderSection>
+    <renderSection data-section="coordinates">
     <div id="worldPanel">
-			<!--<div id="usersConnected">
-				<div class="list-group" id="usersList">
-					
-				</div>
-			</div>
-
-			<div id="worldActions">
-				<div class="row">
-					<div class="col-xs-4"></div>
-				</div>
-			</div>-->
-			<div id="coordinates">
-				<ul id="tabs">
-					<li><a href="#tab1">Tab 1</a></li>
-					<li><a href="#tab2">Tab 2</a></li>
-					<li><a href="#tab3">Tab 3</a></li>
-					<li><a href="#tab1">Tab 1</a></li>
-					<li><a href="#tab2">Tab 2</a></li>
-					<li><a href="#tab3">Tab 3</a></li>
-					<li><a href="#tab1">Tab 1</a></li>
-					<li><a href="#tab2">Tab 2</a></li>
-					<li><a href="#tab3">Tab 3</a></li>
-				</ul>
-				<div id="tab1">
-					<h1>Cuack!</h1>
-				</div>
-				<div id="tab2">
-					<h1>Cuock!</h1>
-				</div>
-				<div id="tab3">
-					<h1>Cuuck!</h1>
-				</div>
-			</div>
+        <div id="coordinates">
+            <ul id="tabs">
+                <li><a href="#tab1">Tab 1</a></li>
+                <li><a href="#tab2">Tab 2</a></li>
+                <li><a href="#tab3">Tab 3</a></li>
+                <li><a href="#tab1">Tab 1</a></li>
+                <li><a href="#tab2">Tab 2</a></li>
+                <li><a href="#tab3">Tab 3</a></li>
+                <li><a href="#tab1">Tab 1</a></li>
+                <li><a href="#tab2">Tab 2</a></li>
+                <li><a href="#tab3">Tab 3</a></li>
+            </ul>
+            <div id="tab1">
+                <h1>Cuack!</h1>
+            </div>
+            <div id="tab2">
+                <h1>Cuock!</h1>
+            </div>
+            <div id="tab3">
+                <h1>Cuuck!</h1>
+            </div>
+        </div>
+        <br/>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-2 col-xs-offset-4">
+                    <button id="newTab" class="btn btn-success"><render>createTab</render></button>
+                </div>
+            </div>
+        </div>
     </div>
 
-  <!-- MODALS -->
+        <!-- World Actions Modal -->
+            <div id="createGroupModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h3 class="modal-title" style="text-align: center"><render>createGroupTitle</render></h3>
+                        </div>
+                        <div class="modal-body">
+                            <form onsubmit="return false;">
+                                <label for="groupName"><render>groupNameLbl</render></label>
+                                <input class="form-control" id="groupName" maxlength="10"/>
+                                <button class="btn btn-primary" id="createGroupBtn"><render>createGroupBtn</render></button>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" id="openCreateGroupModal"><render>createGroupCloseBtn</render></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <!-- Modal End -->
+
+    </renderSection>
     <!-- World Actions Modal -->
+    <renderSection data-section="worldActions">
     <div id="worldActionsModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
 
@@ -91,7 +117,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h3 class="modal-title" style="text-align: center">Mantenimiento del mundo</h3>
+                    <h3 class="modal-title" style="text-align: center"><render>title</render></h3>
                 </div>
                 <div class="modal-body">
                     <div class="row" style="height: 100%">
@@ -102,7 +128,7 @@
                         </div>
                         <div class="col-xs-4 col-xs-offset-1">
                             <div class="row" style="border-bottom: 1px solid black">
-                                <h6 style="border-bottom: 1px solid black; text-align: center">Usuarios pendientes</h6>
+                                <h6 style="border-bottom: 1px solid black; text-align: center"><render>pendingUsers</render></h6>
                                 <div class="list-group" id="pendingUsersList">
 
                                 </div>
@@ -111,24 +137,25 @@
 
                                 <div class="row">
                                     <div class="col-xs-8">
-                                         <h6>Invitar Usuario</h6>
+                                         <h6><render>inviteUser</render></h6>
                                     </div>
                                     <div class="col-xs-1">
                                         <button class="btn btn-info" id="inviteUserBtn" style="margin-top: 8px"><span class="glyphicon glyphicon-envelope"></span></button>
                                     </div>
                                 </div>
-                                <label for="nickOfUser">Nick</label>
+                                <label for="nickOfUser"><render>nickLbl</render></label>
                                 <input id="nickOfUser" class="form-control"/>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><render>closeBtn</render></button>
                 </div>
             </div>
         </div>
     </div>
+    </renderSection>
     <!-- Modal End -->
   </body>
 </html>

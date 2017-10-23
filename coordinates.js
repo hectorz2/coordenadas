@@ -7,7 +7,11 @@ const {remote} = require('electron');
  
 const main = remote.require('./main.js');
 
+const renderHelper =  require('./js/renderHelper');
+
 let worldName = '';
+
+let texts = main.getTexts('coordinates');
 
 $(document).ready(function(){
 	let name = main.getWorldName();
@@ -17,9 +21,27 @@ $(document).ready(function(){
 	$('#close').click(function(){main.closeCoordinates();});
 	$('#worldActions').click(openWorldActions);
     $('#inviteUserBtn').click(inviteUser);
-
+    $('#openCreateGroupBtn').click(openCreateGroup);
+    $('#createGroupBtn').click(createGroup);
 	loadCoordinates();
+
+	renderHelper.renderTexts('coordinates');
 });
+
+function openCreateGroup(){
+    $('#groupName').val('');
+
+    $('#createGroupModal').modal('show');
+}
+
+function createGroup(){
+    let $groupName = $('#groupName');
+    let groupName = $groupName.val();
+
+    if(groupName === ''){
+        swal({title: texts['coordinates'].createGroupFillFieldsError, type: 'error'});
+    }
+}
 
 function openWorldActions(){
     loadUsers();
@@ -32,8 +54,8 @@ function openWorldActions(){
 
 function loadUsers(){
 	main.getUsersInWorld(function(state, users){
-        let msg = state===0?'Lista de usuarios buscada correctamente':state1Msg;
-        let type = state===0?'success':'error';
+        let msg = state===0 ? 'List of users searched well' : state1Msg;
+        let type = state===0 ? 'success' : 'error';
         if(state == 0) {
             let $list = $('#usersList');
             $list.empty();
@@ -60,8 +82,8 @@ function loadUsers(){
 
 function getPendingUsersInWorld(){
     main.getPendingUsersInWorld(function(state, users){
-        let msg = state===0?'Lista de usuarios pendientes buscada correctamente':state1Msg;
-        let type = state===0?'success':'error';
+        let msg = state===0 ? 'List of pedusers searched well' : state1Msg;
+        let type = state===0 ? 'success' : 'error';
         if(state == 0) {
             let $list = $('#pendingUsersList');
             $list.empty();
@@ -76,12 +98,12 @@ function getPendingUsersInWorld(){
                     $removeBtn.click(function(){
                         confirmDialog(function(){
                             main.deleteInvitationToWorld(user.nick, function(state){
-                                let msg = state===0?'Invitación cancelada correctamente':state1Msg;
-                                let type = state===0?'success':'error';
+                                let msg = state===0 ? texts['worldActions'].deleteInvitationDone : state1Msg;
+                                let type = state===0 ? 'success' : 'error';
                                 $item.remove();
                                 swal({title: msg, type: type});
                             });
-                        }, 'El usuario perderá la invitación.');
+                        }, texts['worldActions'].deleteInvitationAdvice);
                     });
 
                     $name.css({
@@ -115,16 +137,16 @@ function inviteUser(){
     let $nick = $('#nickOfUser');
     let nick = $nick.val();
     if(nick == '') {
-        swal({title: 'El nick no puede estar vacío', type: 'error'});
+        swal({title: texts['worldActions'].fillFieldsError, type: 'error'});
     } else if (nick.split(' ').length > 1) {
-        swal({title: 'El nick no puede contener espacios', type: 'error'});
+        swal({title: texts['worldActions'].nickHasSpacesError, type: 'error'});
     } else {
         main.inviteUserToWorld(nick, function(state) {
-            let msg = state===0?'Usuario invitado correctamente'
-                :state===1?state1Msg
-                    :state===2?'El usuario no existe'
-                        :'El usuario ya está en el mundo o ya está invitado';
-            let type = state===0?'success':'error';
+            let msg = state===0 ? texts['worldActions'].inviteUserDone
+                :state===1 ? state1Msg
+                    :state===2 ? texts['worldActions'].userNotExists
+                        : texts['worldActions'].userWasAlreadyInvited;
+            let type = state===0 ? 'success' : 'error';
             $nick.val('');
             if(state === 0){
                 getPendingUsersInWorld();

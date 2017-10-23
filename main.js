@@ -16,13 +16,20 @@ const socket = io.connect('http://localhost:3000', {reconnect: true});
 /*const socket = io.connect('https://mc-coordhelper-server.herokuapp.com/',
     {reconnect: true, transports : ['websocket'], path: '/socket.io'});*/
 
+const allowedLangs = [
+    'es',
+    'en'
+];
+
+let texts = null;
+
 let userLogged = {};
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-
-
 let mainWindow = null;
 let coordinatesWindow = null;
+
+let userLanguaje = null;
 
 let connected = false;
 
@@ -46,7 +53,8 @@ function createWindow () {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
-	coordinatesWindow.close();
+      if(coordinatesWindow != null)
+	    coordinatesWindow.close();
     mainWindow = null;
 	
   });
@@ -68,10 +76,36 @@ app.on('ready', function(){
 		
 		mainWindow.reload();
 	});
-	
-	
+
+    if(settings.has('userLanguaje')){
+        console.log('Languaje is defined');
+        userLanguaje = settings.get('userLanguaje');
+    } else {
+        console.log('Languaje is not defined');
+        userLanguaje = app.getLocale();
+        if(allowedLangs.indexOf(userLanguaje) === -1) {
+            userLanguaje = 'en';
+            console.log('Languaje isnt allowed, configuring english');
+        }
+
+        settings.set('userLanguaje', userLanguaje);
+        console.log('Languaje saved');
+    }
+
+
+    loadTexts();
+
 	createWindow();
 });
+
+function loadTexts(){
+    console.log('loading texts for languaje: ' + userLanguaje);
+    const loadJsonFile = require('load-json-file');
+
+    texts = loadJsonFile.sync(`./langs/${userLanguaje}.json`)
+    //console.log(texts);
+    //=> {foo: true}
+}
 
 // Quit when all windows are closed.
 /*app.on('window-all-closed', function () {
@@ -110,7 +144,7 @@ socket.on('connect', function(){
 	}
 	connected = true;
 	//if(userLogged !== {}) {
-    if(!(Object.keys(userLogged).length === 0 && userLogged.constructor === Object && trolled)){
+    if(!(Object.keys(userLogged).length === 0 && userLogged.constructor === Object)){
         console.log('user: ' + userLogged.nick + ' was renember, checking state...');
         socket.emit('getLoginState', userLogged, (state) => {
             console.log('server state of login: ' + state);
@@ -137,6 +171,28 @@ socket.on('connect_error', function(error){
 		coordinatesWindow.close();
 
 });
+
+exports.getLanguaje = function() {
+    return userLanguaje;
+};
+
+exports.changeLanguaje = function(newLang) {
+    userLanguaje = newLang;
+    settings.set('userLanguaje', userLanguaje);
+    loadTexts();
+    restartApp();
+};
+
+function restartApp(){
+    if(coordinatesWindow != null){
+        coordinatesWindow.close();
+    }
+    mainWindow.reload();
+}
+
+exports.getTexts = function(window = null) {
+    return window==null?texts:texts[window];
+};
 
 exports.receiveConnectionStateFunction = function(method){
 	sendConnectionState = method;
