@@ -227,6 +227,12 @@ io.on('connection', (socket) => {
 		if(userValidation(data.user))
 			dao.world.create(data, answer);
 	});
+
+    socket.on('editWorld', (data, answer) => {
+        console.log('editing world with name: ' + data.name);
+        if(userValidation(data.user))
+            dao.world.update({newName: data.name, id: data.id}, answer);
+    });
 	
 	socket.on('leaveWorld', (user, answer) => {
 		console.log('user: ' + user.nick + ' is leaving  his world');
@@ -259,6 +265,110 @@ io.on('connection', (socket) => {
 			answer(1);
 		}
 	});
+
+	socket.on('loadCoordinates', (data, answer) => {
+	   console.log('loading groups and coordinates of world: ' + data.user.worldId);
+	   if(userValidation(data.user)){
+	       let resultData = [];
+	       dao.group.getAllByWorld({worldId: data.user.worldId}, function(state, groups){
+	           if(state === 0) {
+	               let error = false;
+	               //console.log(JSON.stringify(groups));
+                   for (let i = 0; i < groups.length; i += 1) {
+                       //console.log('doing work on group with id: ' + groups[i].id);
+                       if(error)
+                           break;
+                       dao.coordinate.getAllByGroup({groupId: groups[i].id}, function (state, coordinates) {
+                           let actualIndex = i;
+                           //console.log(JSON.stringify(coordinates));
+                           console.log('state: ' + state);
+                            if(state === 0){
+                                console.log('creating new entry');
+
+                                resultData.push({
+                                    id: groups[i].id,
+                                    name: groups[i].name,
+                                    coordinates: coordinates
+                                });
+                                if(actualIndex === groups.length-1){
+                                    answer(state, resultData);
+                                }
+                            } else {
+                                answer(state, null);
+                                error = true;
+                            }
+                       });
+                   }
+
+
+               } else {
+	               answer(state, null);
+               }
+           });
+       } else {
+	       answer(1);
+       }
+    });
+
+    socket.on('createGroup', (data, answer) => {
+        console.log('creating group with name: ' + data.name);
+        if(userValidation(data.user)){
+            dao.group.create({name: data.name, worldId: data.user.worldId}, function(state, id){
+                answer(state, id);
+            });
+        }
+
+    });
+
+    socket.on('editGroup', (data, answer) => {
+        console.log('editing group with name: ' + data.name);
+        if(userValidation(data.user)){
+            dao.group.update({groupId: data.id, newName: data.name}, function(state){
+                answer(state);
+            });
+        }
+
+    });
+
+    socket.on('deleteGroup', (data, answer) => {
+        console.log('deleting group with id: ' + data.id);
+        if(userValidation(data.user)){
+            dao.group.delete({id: data.id}, function(state){
+                answer(state);
+            });
+        }
+
+    });
+
+    socket.on('createCoordinate', (data, answer) => {
+        console.log('creating coordinate with name: ' + data.name + ' to group: ' + data.groupId);
+        if(userValidation(data.user)){
+            dao.coordinate.create({name: data.name, x: data.x, z: data.z, y: data.y, groupId: data.groupId}, function(state, id){
+                answer(state, id);
+            });
+        }
+
+    });
+
+    socket.on('editCoordinate', (data, answer) => {
+        console.log('editing coordinate with name: ' + data.name);
+        if(userValidation(data.user)){
+            dao.coordinate.update({id: data.id, newName: data.name, newX: data.x, newY: data.y, newZ: data.z}, function(state){
+                answer(state);
+            });
+        }
+
+    });
+
+    socket.on('deleteCoordinate', (data, answer) => {
+        console.log('deleting coordinate with id: ' + data.id);
+        if(userValidation(data.user)){
+            dao.coordinate.delete({id: data.id}, function(state){
+                answer(state);
+            });
+        }
+
+    });
 	socket.join('prueba');
 	io.in('prueba').emit('kk', 'kk');
 });

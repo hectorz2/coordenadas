@@ -86,7 +86,13 @@
       "inviteUserDone": "Usuario invitado correctamente.",
       "deleteInvitationAdvice": "El usuario perderá la invitación.",
       "deleteInvitationDone": "Invitación cancelada correctamente.",
-      "closeBtn": "Cerrar"
+      "closeBtn": "Cerrar",
+      "editWorldTitle": "Editar nombre del mundo",
+      "editWorldNameLbl": "Nombre del mundo (10 caracteres max.)",
+      "editWorldBtn": "Editar",
+      "editWorldCloseBtn": "Cerrar",
+      "editWorldDone": "Mundo actualizado correctamente.",
+      "editWorldFillFieldsError": "Debe rellenar todos los campos."
     },
     "loading": {
       "loading": "Cargando..."
@@ -94,10 +100,34 @@
     "coordinates": {
       "createGroup": "Añadir Grupo",
       "createGroupTitle": "Crear nuevo grupo",
+      "editGroupTitle": "Editar grupo",
       "createGroupCloseBtn": "Cerrar",
       "groupNameLbl": "Nombre del grupo (10 caracteres max.)",
       "createGroupFillFieldsError": "El nombre del grupo no puede estar vacío.",
-      "createGroupBtn": "Crear"
+      "createGroupGroupExistsError": "El grupo ya existe, elige otro nombre.",
+      "createGroupBtn": "Crear",
+      "editGroupBtn": "Editar",
+      "createGroupDone": "Grupo creado correctamente.",
+      "editGroupDone": "Grupo actualizado correctamente.",
+      "createCoordinateTitle": "Crear nueva coordenada",
+      "editCoordinateTitle": "Editar coordenada",
+      "coordinateNameLbl": "Nombre",
+      "coordinateXLbl": "Coordenada X (min. -30000000  max.30000000)",
+      "coordinateZLbl": "Coordenada Z (min. -30000000 max.30000000)",
+      "coordinateYLbl": "Coordenada Y (min. 0 max. 256)",
+      "createCoordinateFillFieldsError": "Deben rellenarse todos los campos.",
+      "createCoordinateCoordinateExistsError": "Ya existe una coordenada idéntica en este grupo.",
+      "createCoordinateBtn": "Crear",
+      "editCoordinateBtn": "Editar",
+      "createCoordinateDone": "Coordenada creada correctamente.",
+      "editCoordinateDone": "Coordenada editada correctamente.",
+      "createCoordinateCloseBtn": "Cerrar",
+      "coordinateName": "Nombre",
+      "deleteGroupAdvice": "El grupo se borrará y esto no puede deshacerse.",
+      "deleteCoordinateAdvice": "La coordenada se borrará y esto no puede deshacerse.",
+      "deleteGroupDone": "Grupo borrado correctamente.",
+      "deleteCoordinateDone": "Coordenada borrada correctamente.",
+      "deleteGroupThereIsOnlyOneError": "No se puede borrar el grupo porque es el único que queda."
     }
   }
 }

@@ -64,7 +64,9 @@ $(document).ready(function(){
 		disconnectedFromWebsocket();
 	}
 	
-	
+	main.receiveForceReloadListFunction(function(){
+		loadList();
+    });
 	//NAV BUTTONS
 	$('#close').click(function(){main.quit();});
 	let $logout = $('#logout');
@@ -357,7 +359,7 @@ function addWorld(){
 function saveWorld(){
     let $name = $('#name');
 	if($name.val() === '')
-		swal({title: 'Debe rellenar todos los campos', type: 'error'});
+		swal({title: texts['worldList'].fillFieldsError, type: 'error'});
 	else {
 		let name = $name.val();
 		$name.val('');

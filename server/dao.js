@@ -63,9 +63,9 @@ function handleDisconnect() {
 handleDisconnect();
 
 module.exports = {
-  user: {
+    user: {
 
-      register: function(user, answer){
+        register: function(user, answer){
 			let sqlCheck = 'SELECT * FROM users WHERE nick = ?';
 			con.query(sqlCheck, [user.nick], function(err, result){
 				console.log(result);
@@ -95,7 +95,7 @@ module.exports = {
 			
 		},
 
-      login: function(user, callback){
+         login: function(user, callback){
 			let sql = 'SELECT * FROM users WHERE nick = ? and password = ?';
 			con.query(sql, [user.nick, user.pwd], function(err, result){
 				console.log(result);
@@ -109,9 +109,9 @@ module.exports = {
 					callback(0);
 				}
 			});
-		},
+         },
 
-      checkForInvitations: function(user, callback){
+        checkForInvitations: function(user, callback){
           let sql = 'SELECT * FROM worlds WHERE id IN (SELECT world FROM user_world WHERE nick = ? AND accepted = 0) ORDER BY name';
           con.query(sql, [user.nick], function(err, result){
               if (err) {
@@ -121,9 +121,9 @@ module.exports = {
                   callback(0, result.length===0?null:result);
               }
           });
-      },
+        },
 
-      acceptInvitation: function(data, callback){
+        acceptInvitation: function(data, callback){
           let sql = 'UPDATE user_world SET accepted = 1 WHERE world = ? AND nick = ?';
           con.query(sql, [data.worldId, data.nick], function(err){
               if (err) {
@@ -133,9 +133,9 @@ module.exports = {
                   callback(0);
               }
           });
-      },
+        },
 
-      denyInvitation: function(data, callback){
+        denyInvitation: function(data, callback){
           let sql = 'DELETE FROM user_world WHERE world = ? AND nick = ?';
           con.query(sql, [data.worldId, data.nick], function(err){
               if (err) {
@@ -145,8 +145,8 @@ module.exports = {
                   callback(0);
               }
           });
-      },
-  },
+        },
+    },
 	world: {
 		list: function(nick, callback){
 			let sql = 'SELECT * FROM worlds WHERE id IN (SELECT world FROM user_world WHERE nick = ? AND accepted = 1) ORDER BY name';
@@ -159,8 +159,8 @@ module.exports = {
 				}
 			});
 		},
-		
-		delete: function(id, callback){ //TODO tendrá que borrar tabs y coordenadas
+
+		delete: function(id, callback){
 			let sql = 'DELETE FROM user_world WHERE world = ?';
 			con.query(sql, [id], function(err){
 				if(err){
@@ -168,26 +168,45 @@ module.exports = {
 					callback(1);
 				} else {
 					console.log('relations deleted');
-					let sql = 'DELETE FROM worlds WHERE id = ?';
-					con.query(sql, [id], function(err){
-						if(err){
-							console.error(err);
-							callback(1);
-						} else {
-							console.log('world deleted');
-							callback(0);
-						}
-					});
+                    let sql = 'DELETE FROM coordinates WHERE group_id IN (SELECT id FROM groups WHERE world = ?)';
+                    con.query(sql, [id], function(err){
+                        if(err){
+                            console.error(err);
+                            callback(1);
+                        } else {
+                            console.log('coordinates of world deleted');
+                            let sql = 'DELETE FROM groups WHERE world = ?';
+                            con.query(sql, [id], function(err){
+                                if(err){
+                                    console.error(err);
+                                    callback(1);
+                                } else {
+                                    console.log('groups of world deleted');
+                                    let sql = 'DELETE FROM worlds WHERE id = ?';
+                                    con.query(sql, [id], function(err){
+                                        if(err){
+                                            console.error(err);
+                                            callback(1);
+                                        } else {
+                                            console.log('world deleted');
+                                            callback(0);
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+
 				}
 			});
-		}, 
-		
+		},
+
 		create: function(data, callback){
 			let sql = 'INSERT INTO worlds SET ?';
 			let values = {
 				name: data.name
 			};
-			con.query(sql, values, function(err, result){ 
+			con.query(sql, values, function(err, result){
 			if (err) {
 				console.error(err);
 				callback(1);
@@ -205,14 +224,16 @@ module.exports = {
 						callback(1);
 					} else {
 						console.log('relation created');
-						callback(0);
+                        module.exports.group.create({name: data.name, worldId: result.insertId}, function(state){
+                            callback(state);
+                        });
 					}
 				});
-				
+
 			}
 			});
 		},
-		
+
 		leave: function(data, callback){
 			let sql = 'DELETE FROM user_world WHERE world = ? AND nick = ?';
 			con.query(sql, [data.id, data.user.nick], function(err){
@@ -312,6 +333,134 @@ module.exports = {
                     callback(0);
                 }
             });
+        },
+
+        update: function(data, callback) {
+            let sql = 'UPDATE worlds SET name = ? WHERE id = ?';
+            con.query(sql, [data.newName, data.id], function(err){
+                if (err) {
+                    console.error(err);
+                    callback(1);
+                } else {
+                    callback(0);
+                }
+            });
+        },
+	},
+    group: {
+        create: function(data, callback) {
+            let sql = 'INSERT INTO groups SET ?';
+            let values = {
+                name: data.name,
+                world: data.worldId
+            };
+            con.query(sql, values, function(err, result){
+                if (err) {
+                    console.error(err);
+                    callback(1, null);
+                } else {
+                    console.log('group created');
+                    callback(0, result.insertId);
+                }
+            });
+        },
+        getAllByWorld: function(data, callback) {
+            let sql = 'SELECT * FROM groups WHERE world = ? ORDER BY name';
+            con.query(sql, [data.worldId], function(err, result) {
+                if (err) {
+                    console.error(err);
+                    callback(1, null);
+                } else {
+                    callback(0, result);
+                }
+            });
+        },
+        update: function(data, callback) {
+            let sql = 'UPDATE groups SET name = ? WHERE id = ?';
+            con.query(sql, [data.newName, data.groupId], function(err){
+                if (err) {
+                    console.error(err);
+                    callback(1);
+                } else {
+                    callback(0);
+                }
+            });
+        },
+        delete: function(data, callback) {
+            let sql = 'DELETE FROM coordinates WHERE group_id = ?';
+            con.query(sql, [data.id], function(err){
+                if(err){
+                    console.error(err);
+                    callback(1);
+                } else {
+                    console.log('coordinates deleted');
+                    let sql = 'DELETE FROM groups WHERE id = ?';
+                    con.query(sql, [data.id], function(err){
+                        if(err){
+                            console.error(err);
+                            callback(1);
+                        } else {
+                            console.log('group deleted');
+                            callback(0);
+                        }
+                    });
+                }
+            });
         }
-	}
+    },
+    coordinate: {
+        create: function(data, callback) {
+            let sql = 'INSERT INTO coordinates SET ?';
+            let values = {
+                name: data.name,
+                x: data.x,
+                z: data.z,
+                y: data.y,
+                group_id: data.groupId
+            };
+            con.query(sql, values, function(err, result){
+                if (err) {
+                    console.error(err);
+                    callback(1, null);
+                } else {
+                    console.log('coordinate created');
+                    callback(0, result.insertId);
+                }
+            });
+        },
+        getAllByGroup: function(data, callback) {
+            let sql = 'SELECT * FROM coordinates WHERE group_id = ? ORDER BY name';
+            con.query(sql, [data.groupId], function(err, result) {
+                if (err) {
+                    console.error(err);
+                    callback(1, null);
+                } else {
+                    callback(0, result);
+                }
+            });
+        },
+        update: function(data, callback) {
+            let sql = 'UPDATE coordinates SET name = ?, x = ?, z = ?, y = ? WHERE id = ?';
+            con.query(sql, [data.newName, data.newX, data.newZ, data.newY, data.id], function(err){
+                if (err) {
+                    console.error(err);
+                    callback(1);
+                } else {
+                    callback(0);
+                }
+            });
+        },
+        delete: function(data, callback) {
+            let sql = 'DELETE FROM coordinates WHERE id = ?';
+            con.query(sql, [data.id], function(err){
+                if(err){
+                    console.error(err);
+                    callback(1);
+                } else {
+                    console.log('coordinate deleted');
+                    callback(0);
+                }
+            });
+        }
+    }
 };

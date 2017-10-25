@@ -22,11 +22,14 @@
     <nav class="container-fluid">
 			<div class="row">
 			    <button onclick="location.reload();">R</button>
-				<div class="col-xs-5">
+				<div class="col-xs-4">
 					<h4 id="worldName"></h4>
 				</div>
                 <div class="col-xs-2">
                     <button class="btn btn-info pull-right" id="worldActions"><span class="glyphicon glyphicon-wrench"></span></button>
+                </div>
+                <div class="col-xs-2">
+                    <button class="btn btn-warning" id="openEditWorld"><span class="glyphicon glyphicon-pencil"></span></button>
                 </div>
 				<div class="col-xs-2 col-xs-offset-3">
 					<button class="btn btn-danger pull-right" id="close"><span class="glyphicon glyphicon-remove"></span></button>
@@ -52,7 +55,7 @@
     <div id="worldPanel">
         <div id="coordinates">
             <ul id="tabs">
-                <li><a href="#tab1">Tab 1</a></li>
+                <!--<li><a href="#tab1">Tab 1</a></li>
                 <li><a href="#tab2">Tab 2</a></li>
                 <li><a href="#tab3">Tab 3</a></li>
                 <li><a href="#tab1">Tab 1</a></li>
@@ -60,9 +63,9 @@
                 <li><a href="#tab3">Tab 3</a></li>
                 <li><a href="#tab1">Tab 1</a></li>
                 <li><a href="#tab2">Tab 2</a></li>
-                <li><a href="#tab3">Tab 3</a></li>
+                <li><a href="#tab3">Tab 3</a></li>-->
             </ul>
-            <div id="tab1">
+            <!--<div id="tab1">
                 <h1>Cuack!</h1>
             </div>
             <div id="tab2">
@@ -70,19 +73,19 @@
             </div>
             <div id="tab3">
                 <h1>Cuuck!</h1>
-            </div>
+            </div>-->
         </div>
         <br/>
         <div class="container">
             <div class="row">
                 <div class="col-xs-2 col-xs-offset-4">
-                    <button id="newTab" class="btn btn-success"><render>createTab</render></button>
+                    <button id="openCreateGroupBtn" class="btn btn-success"><render>createGroup</render></button>
                 </div>
             </div>
         </div>
     </div>
 
-        <!-- World Actions Modal -->
+        <!-- CreateGroup Modal -->
             <div id="createGroupModal" class="modal fade" role="dialog">
                 <div class="modal-dialog">
 
@@ -90,23 +93,58 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h3 class="modal-title" style="text-align: center"><render>createGroupTitle</render></h3>
+                            <h3 class="modal-title" style="text-align: center"><span id="createGroupTitle"></span></h3>
                         </div>
                         <div class="modal-body">
                             <form onsubmit="return false;">
+                                <br/>
                                 <label for="groupName"><render>groupNameLbl</render></label>
                                 <input class="form-control" id="groupName" maxlength="10"/>
-                                <button class="btn btn-primary" id="createGroupBtn"><render>createGroupBtn</render></button>
+                                <br/>
+                                <button class="btn btn-primary" id="createGroupBtn"></button>
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal" id="openCreateGroupModal"><render>createGroupCloseBtn</render></button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><render>createGroupCloseBtn</render></button>
                         </div>
                     </div>
                 </div>
             </div>
         <!-- Modal End -->
 
+
+        <!-- CreateCoordinate Modal -->
+        <div id="createCoordinateModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h3 class="modal-title" style="text-align: center"><span id="createCoordinateTitle"></span></h3>
+                    </div>
+                    <div class="modal-body">
+                        <form onsubmit="return false;">
+                            <br/>
+                            <label for="coordinateName"><render>coordinateNameLbl</render></label>
+                            <input class="form-control" id="coordinateName"/>
+                            <label for="coordinateX"><render>coordinateXLbl</render></label>
+                            <input class="form-control" id="coordinateX" type="number" max="30000000" min="-30000000" value="0"/>
+                            <label for="coordinateZ"><render>coordinateZLbl</render></label>
+                            <input class="form-control" id="coordinateZ" type="number" max="30000000" min="-30000000" value="0"/>
+                            <label for="coordinateY"><render>coordinateYLbl</render></label>
+                            <input class="form-control" id="coordinateY" type="number" max="256" min="0" value="0"/>
+                            <br/>
+                            <button class="btn btn-primary" id="createCoordinateBtn"></button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal"><render>createCoordinateCloseBtn</render></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal End -->
     </renderSection>
     <!-- World Actions Modal -->
     <renderSection data-section="worldActions">
@@ -155,7 +193,35 @@
             </div>
         </div>
     </div>
+        <!-- Modal End -->
+
+        <!-- CreateGroup Modal -->
+        <div id="editWorldModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h3 class="modal-title" style="text-align: center"><render>editWorldTitle</render></h3>
+                    </div>
+                    <div class="modal-body">
+                        <form onsubmit="return false;">
+                            <br/>
+                            <label for="worldName"><render>editWorldNameLbl</render></label>
+                            <input class="form-control" id="worldNameInput" maxlength="10"/>
+                            <br/>
+                            <button class="btn btn-primary" id="editWorldBtn"><render>editWorldBtn</render></button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal"><render>editWorldCloseBtn</render></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal End -->
     </renderSection>
-    <!-- Modal End -->
+
   </body>
 </html>

@@ -34,6 +34,7 @@ let userLanguaje = null;
 let connected = false;
 
 let sendConnectionState = '';
+let forceReloadList = '';
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 430, height: 500/*250*/, frame: false, icon: './img/icon.png'});
@@ -274,6 +275,7 @@ exports.denyInvitation = function(worldId, answer){
     });
 };
 
+//TODO borrar
 socket.on('kk', function(msg){
 	console.log('pruebee msg: ' + msg);
 });
@@ -288,7 +290,7 @@ exports.selectWorld = function(worldId, selectedWorldName, answer){
 		}
 
 		worldName = selectedWorldName;
-		coordinatesWindow = new BrowserWindow({width: 500, height: 800, frame: false});
+		coordinatesWindow = new BrowserWindow({width: 600, height: 800, frame: false});
 
 		coordinatesWindow.loadURL(url.format({
 		pathname: path.join(__dirname, 'coordinates.html'),
@@ -363,6 +365,23 @@ exports.saveWorld = function(name, answer){
 	});
 };
 
+exports.receiveForceReloadListFunction = function(method){
+    forceReloadList = method;
+};
+
+exports.editWorld = function(name, answer){
+    console.log('editing world with name: ' + name);
+
+    socket.emit('editWorld', {user: userLogged, name: name, id: userLogged.worldId}, function(state){
+        if(state === 0){
+            if(forceReloadList !== '')
+                forceReloadList();
+        }
+        answer(state);
+        console.log('world updated');
+    });
+};
+
 exports.closeCoordinates = function(){
 	coordinatesWindow.close();
 };
@@ -374,4 +393,54 @@ exports.leaveWorld = function(id, answer){
 		answer(state);
 		console.log('world leaved with state: ' + state);
 	});
+};
+
+exports.loadCoordinates = function(answer){
+    console.log('loading coordinates for world: ' + userLogged.worldId);
+    socket.emit('loadCoordinates', {user: userLogged}, function(state, result){
+        console.log('coordinates retrieved: ' + JSON.stringify(result));
+        answer(state, result);
+    });
+};
+
+exports.createGroup = function(groupName, answer){
+    console.log('creating group: ' + groupName);
+    socket.emit('createGroup', {user: userLogged, name: groupName}, function(state, id){
+        answer(state, id);
+    });
+};
+
+exports.editGroup = function(groupName, groupId, answer){
+    console.log('editting group: ' + groupName);
+    socket.emit('editGroup', {user: userLogged, name: groupName, id: groupId}, function(state){
+        answer(state);
+    });
+};
+
+exports.deleteGroup = function(groupId, answer){
+    console.log('deleting group: ' + groupId);
+    socket.emit('deleteGroup', {user: userLogged, id: groupId}, function(state){
+        answer(state);
+    });
+};
+
+exports.createCoordinate = function(coordinateName, x, z, y, groupId, answer){
+    console.log('creating coordinate: ' + coordinateName + ' to group: ' + groupId);
+    socket.emit('createCoordinate', {user: userLogged, name: coordinateName, x: x, z: z, y: y, groupId: groupId}, function(state, id){ //TODO evento en server
+        answer(state, id);
+    });
+};
+
+exports.editCoordinate = function(coordinateName, x, z, y, coordinateId, answer){
+    console.log('editing coordinate: ' + coordinateName);
+    socket.emit('editCoordinate', {user: userLogged, name: coordinateName, x: x, z: z, y: y, id: coordinateId}, function(state){ //TODO evento en server
+        answer(state);
+    });
+};
+
+exports.deleteCoordinate = function(coordinateId, answer){
+    console.log('deleting coordinate: ' + coordinateId);
+    socket.emit('deleteCoordinate', {user: userLogged, id: coordinateId}, function(state){
+        answer(state);
+    });
 };
