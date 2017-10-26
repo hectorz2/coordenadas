@@ -369,7 +369,7 @@ io.on('connection', (socket) => {
         }
 
     });
-	socket.join('prueba');
-	io.in('prueba').emit('kk', 'kk');
+	//socket.join('prueba');
+	//io.in('prueba').emit('kk', 'kk');
 });
 

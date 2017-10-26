@@ -21,17 +21,20 @@
   <body>
     <nav class="container-fluid">
 			<div class="row">
-			    <button onclick="location.reload();">R</button>
-				<div class="col-xs-4">
+			    <!--<button onclick="location.reload();">R</button>-->
+				<div class="col-xs-3">
 					<h4 id="worldName"></h4>
 				</div>
                 <div class="col-xs-2">
-                    <button class="btn btn-info pull-right" id="worldActions"><span class="glyphicon glyphicon-wrench"></span></button>
+                    <button class="btn btn-info" id="worldActions"><span class="glyphicon glyphicon-wrench"></span></button>
                 </div>
                 <div class="col-xs-2">
                     <button class="btn btn-warning" id="openEditWorld"><span class="glyphicon glyphicon-pencil"></span></button>
                 </div>
-				<div class="col-xs-2 col-xs-offset-3">
+                <div class="col-xs-2">
+                    <button class="btn btn-success" id="reloadCoordinates"><span class="glyphicon glyphicon-refresh"></span></button>
+                </div>
+				<div class="col-xs-2 col-xs-offset-1">
 					<button class="btn btn-danger pull-right" id="close"><span class="glyphicon glyphicon-remove"></span></button>
 				</div>
 			</div>
@@ -55,25 +58,11 @@
     <div id="worldPanel">
         <div id="coordinates">
             <ul id="tabs">
-                <!--<li><a href="#tab1">Tab 1</a></li>
-                <li><a href="#tab2">Tab 2</a></li>
-                <li><a href="#tab3">Tab 3</a></li>
-                <li><a href="#tab1">Tab 1</a></li>
-                <li><a href="#tab2">Tab 2</a></li>
-                <li><a href="#tab3">Tab 3</a></li>
-                <li><a href="#tab1">Tab 1</a></li>
-                <li><a href="#tab2">Tab 2</a></li>
-                <li><a href="#tab3">Tab 3</a></li>-->
             </ul>
             <!--<div id="tab1">
                 <h1>Cuack!</h1>
             </div>
-            <div id="tab2">
-                <h1>Cuock!</h1>
-            </div>
-            <div id="tab3">
-                <h1>Cuuck!</h1>
-            </div>-->
+            -->
         </div>
         <br/>
         <div class="container">
@@ -127,7 +116,7 @@
                         <form onsubmit="return false;">
                             <br/>
                             <label for="coordinateName"><render>coordinateNameLbl</render></label>
-                            <input class="form-control" id="coordinateName"/>
+                            <input class="form-control" id="coordinateName" maxlength="30"/>
                             <label for="coordinateX"><render>coordinateXLbl</render></label>
                             <input class="form-control" id="coordinateX" type="number" max="30000000" min="-30000000" value="0"/>
                             <label for="coordinateZ"><render>coordinateZLbl</render></label>

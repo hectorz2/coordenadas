@@ -30,6 +30,7 @@ $(document).ready(function(){
     });
     $('#editWorldBtn').click(editWorld);
 	loadCoordinates();
+    $('#reloadCoordinates').click(function(){loadCoordinates()});
 
 	renderHelper.renderTexts('coordinates');
 });
@@ -453,6 +454,7 @@ function inviteUser(){
     }
 }
 let coordinatesObject = {};
+let tmpGroupCoordinateAdding = -1;
 let firstTime = true;
 function loadCoordinates(){
     main.loadCoordinates(function(state, groups){
@@ -462,13 +464,14 @@ function loadCoordinates(){
         let type = state===0 ? 'success' : 'error';
         if(state === 0) {
             coordinatesObject = groups;
-            renderCoordinates();
+
+            renderCoordinates(firstTime?0:$('#coordinates').tabs('option', 'active'));
         } else {
             swal({title: msg, type: type});
         }
     });
 }
-let tmpGroupCoordinateAdding = -1;
+
 function renderCoordinates(selectedIndex = null){
     if(!firstTime) {
         sortAlphabeticalByName();
@@ -592,7 +595,7 @@ function addCordinate($div, group, coordinate, index, indexOfGroup){
     let $x = $(`<span>${coordinate.x}</span>`);
     let $seeBtn = $(`<button class="btn btn-info"><span class="glyphicon glyphicon-eye-open"></span></button>`);
     $seeBtn.click(function(){
-        swal('click!');
+        main.createView(coordinate);
     });
     $col1.append($x);
     $col1.append($seeBtn);

@@ -1,3 +1,5 @@
+const VERSION = '0.9-ALFA'; //TODO hacer comprobacion
+
 const electron = require('electron');
 // Module to control application life.
 const app = electron.app;
@@ -26,8 +28,11 @@ let texts = null;
 let userLogged = {};
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
+let bootWindow = null;
+let needsToUpdateWindow = null;
 let mainWindow = null;
 let coordinatesWindow = null;
+let coordinateViewWindow = [];
 
 let userLanguaje = null;
 
@@ -36,8 +41,20 @@ let connected = false;
 let sendConnectionState = '';
 let forceReloadList = '';
 function createWindow () {
+
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 430, height: 500/*250*/, frame: false, icon: './img/icon.png'});
+  mainWindow = new BrowserWindow({width: 430, height: 500/*250*/, frame: false, icon: './img/icon.png', resizable: false, fullscreenable: false});
+
+
+    if(settings.has('mainX') && settings.has('mainY')){
+        console.log('position of main window is defined');
+        let x = settings.get('mainX');
+        let y = settings.get('mainY');
+        mainWindow.setPosition(x, y);
+    }
+
+
+
 
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
@@ -54,11 +71,68 @@ function createWindow () {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
-      if(coordinatesWindow != null)
-	    coordinatesWindow.close();
-    mainWindow = null;
+
+      /*for(let i = 0; i < coordinateViewWindow.length; i += 1){
+          if(coordinateViewWindow[i] != null)
+              coordinateViewWindow[i].close();
+      }*/
+
+      if(coordinatesWindow != null) {
+          coordinatesWindow.close();
+      }
+
+
+
+
+      mainWindow = null;
 	
   });
+}
+
+function createBootWindow () {
+
+    // Create the browser window.
+    bootWindow = new BrowserWindow({width: 120, height: 120, frame: false, icon: './img/icon.png', resizable: false, fullscreenable: false});
+
+    // and load the index.html of the app.
+    bootWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'boot.html'),
+        protocol: 'file:',
+        slashes: true
+    }));
+
+    // Open the DevTools.
+    // bootWindow.webContents.openDevTools()
+    // Emitted when the window is closed.
+    bootWindow.on('closed', function () {
+        // Dereference the window object, usually you would store windows
+        // in an array if your app supports multi windows, this is the time
+        // when you should delete the corresponding element.
+        bootWindow = null;
+    });
+}
+
+function createNeedsToUpdateWindow () {
+
+    // Create the browser window.
+    needsToUpdateWindow = new BrowserWindow({width: 120, height: 120, frame: false, icon: './img/icon.png', resizable: false, fullscreenable: false});
+
+    // and load the index.html of the app.
+    bootWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'needsToUpdate.html'),
+        protocol: 'file:',
+        slashes: true
+    }));
+
+    // Open the DevTools.
+    // bootWindow.webContents.openDevTools()
+    // Emitted when the window is closed.
+    bootWindow.on('closed', function () {
+        // Dereference the window object, usually you would store windows
+        // in an array if your app supports multi windows, this is the time
+        // when you should delete the corresponding element.
+        bootWindow = null;
+    });
 }
 
 // This method will be called when Electron has finished
@@ -69,13 +143,32 @@ app.on('ready', function(){
 	// noinspection JSCheckFunctionSignatures
     globalShortcut.register('CommandOrControl+Shift+C', () => {
 		console.log('CommandOrControl+Shift+C is pressed');
+        for(let i = 0; i < coordinateViewWindow.length; i += 1){
+            if(coordinateViewWindow[i] != null)
+                coordinateViewWindow[i].close();
+        }
 	});
+
+    globalShortcut.register('CommandOrControl+Shift+O', () => {
+        console.log('CommandOrControl+Shift+O is pressed');
+        if(!(Object.keys(userLogged).length === 0 && userLogged.constructor === Object)) {
+            if (coordinatesWindow != null)
+                coordinatesWindow.show();
+            else
+                if(forceReloadList !== ''){
+                    forceReloadList();
+                    mainWindow.show();
+                }
+
+        }
+
+    });
 
 	// noinspection JSCheckFunctionSignatures
     globalShortcut.register('CommandOrControl+Shift+R', () => {
-		console.log('CommandOrControl+Shift+R is pressed');
+		//console.log('CommandOrControl+Shift+R is pressed');
 		
-		mainWindow.reload();
+		//mainWindow.reload();
 	});
 
     if(settings.has('userLanguaje')){
@@ -96,7 +189,8 @@ app.on('ready', function(){
 
     loadTexts();
 
-	createWindow();
+	//createWindow();
+    createBootWindow();
 });
 
 function loadTexts(){
@@ -137,26 +231,43 @@ app.on('before-quit', function(){
 
 socket.on('connect', function(){
 	console.log('connected to websocket server');
+	console.log('checking version. Actual version is: ' + VERSION);
+    socket.emit('getLastVersion', '', (state) => {
+
+        if(state === 0){
+            console.log('app is updated');
+            createWindow();
+            bootWindow.close();
+            connected = true;
+            //if(userLogged !== {}) {
+            if(!(Object.keys(userLogged).length === 0 && userLogged.constructor === Object)){
+                console.log('user: ' + userLogged.nick + ' was renember, checking state...');
+                socket.emit('getLoginState', userLogged, (state) => {
+                    console.log('server state of login: ' + state);
+                    if (!state) userLogged = {};
+                    if (sendConnectionState !== '')
+                        sendConnectionState(connected);
+                });
+            }
+            else
+            if(sendConnectionState !== '')
+                sendConnectionState(connected);
+        } else if(state === -1) {
+            console.log('app needs to update');
+            createNeedsToUpdateWindow();
+        } else {
+            console.log('there was an error');
+            app.quit();
+        }
+    });
+
 	if(settings.has('userRemembered')){
 		userLogged.nick = settings.get('userRemembered');
 		if(settings.has('keyRemembered')){
 			userLogged.key = settings.get('keyRemembered');
 		}
 	}
-	connected = true;
-	//if(userLogged !== {}) {
-    if(!(Object.keys(userLogged).length === 0 && userLogged.constructor === Object)){
-        console.log('user: ' + userLogged.nick + ' was renember, checking state...');
-        socket.emit('getLoginState', userLogged, (state) => {
-            console.log('server state of login: ' + state);
-            if (!state) userLogged = {};
-            if (sendConnectionState !== '')
-                sendConnectionState(connected);
-        });
-    }
-	else 
-		if(sendConnectionState !== '')
-			sendConnectionState(connected);
+
 });
 	
 socket.on('connect_error', function(error){
@@ -209,6 +320,10 @@ exports.isConnected = function() {
 };
 
 exports.quit = function(){
+    let position = mainWindow.getPosition();
+    console.log('saving position of main window: ' + position);
+    settings.set('mainX', position[0]);
+    settings.set('mainY', position[1]);
 	app.quit();
 };
 
@@ -276,11 +391,12 @@ exports.denyInvitation = function(worldId, answer){
 };
 
 //TODO borrar
-socket.on('kk', function(msg){
+/*socket.on('kk', function(msg){
 	console.log('pruebee msg: ' + msg);
-});
+});*/
 let worldName = '';
 exports.selectWorld = function(worldId, selectedWorldName, answer){
+    coordinateViewWindow = [];
 	console.log('selecting world: ' + worldId);
 	userLogged.worldId = worldId;
 	socket.emit('selectWorld', userLogged, function(state){
@@ -290,9 +406,17 @@ exports.selectWorld = function(worldId, selectedWorldName, answer){
 		}
 
 		worldName = selectedWorldName;
-		coordinatesWindow = new BrowserWindow({width: 600, height: 800, frame: false});
+		coordinatesWindow = new BrowserWindow({width: 600, height: 800, frame: false, resizable: false, fullscreenable: false});
 
-		coordinatesWindow.loadURL(url.format({
+        if(settings.has('coordinatesX') && settings.has('coordinatesY')){
+            console.log('position of main window is defined');
+            let x = settings.get('coordinatesX');
+            let y = settings.get('coordinatesY');
+            coordinatesWindow.setPosition(x, y);
+        }
+
+
+        coordinatesWindow.loadURL(url.format({
 		pathname: path.join(__dirname, 'coordinates.html'),
 		protocol: 'file:',
 		slashes: true
@@ -302,18 +426,30 @@ exports.selectWorld = function(worldId, selectedWorldName, answer){
 		// coordinatesWindow.webContents.openDevTools()
 
 		// Emitted when the window is closed.
-		coordinatesWindow.on('closed', function () {
+
+		coordinatesWindow.on('close', function () {
 		// Dereference the window object, usually you would store windows
 		// in an array if your app supports multi windows, this is the time
 		// when you should delete the corresponding element.
 			console.log('closing coordinates window...');
-			coordinatesWindow = null;
-			
-			socket.emit('leaveWorld', userLogged, function(state){
-				coordinatesWindow = null;
-				userLogged.worldId = null;
-				console.log('world leaved with state: ' + state);
-			});
+
+
+            for(let i = 0; i <= coordinateViewWindow.length; i += 1){
+                if(i === coordinateViewWindow.length){
+                    coordinatesWindow = null;
+                } else {
+                    if (coordinateViewWindow[i] != null)
+                        coordinateViewWindow[i].close();
+                }
+            }
+
+            socket.emit('leaveWorld', userLogged, function(state){
+                userLogged.worldId = null;
+                console.log('world leaved with state: ' + state);
+            });
+
+
+
 		});
 	});
 };
@@ -383,6 +519,14 @@ exports.editWorld = function(name, answer){
 };
 
 exports.closeCoordinates = function(){
+    let position = coordinatesWindow.getPosition();
+    console.log('saving position of coordinates window: ' + position);
+    settings.set('coordinatesX', position[0]);
+    settings.set('coordinatesY', position[1]);
+    /*for(let i = 0; i < coordinateViewWindow.length; i += 1){
+        if(coordinateViewWindow[i] != null)
+            coordinateViewWindow[i].close();
+    }*/
 	coordinatesWindow.close();
 };
 
@@ -443,4 +587,38 @@ exports.deleteCoordinate = function(coordinateId, answer){
     socket.emit('deleteCoordinate', {user: userLogged, id: coordinateId}, function(state){
         answer(state);
     });
+};
+
+exports.createView = function(coordinate){
+    let viewWindow = new BrowserWindow({width: 200, height: 100/*250*/, frame: false, icon: './img/icon.png', alwaysOnTop: true, resizable: false, fullscreenable: false});
+
+
+    // and load the view.html of the app.
+    viewWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'coordinateView.html'),
+        protocol: 'file:',
+        slashes: true
+    }));
+
+    // Open the DevTools.
+    // viewWindow.webContents.openDevTools()
+
+    // Emitted when the window is closed.
+    viewWindow.on('close', function () {
+        // Dereference the window object, usually you would store windows
+        // in an array if your app supports multi windows, this is the time
+        // when you should delete the corresponding element.
+        viewWindow = null;
+    });
+
+    viewWindow.coordinate = coordinate;
+    viewWindow.index = coordinateViewWindow.length;
+
+    coordinateViewWindow.push(viewWindow);
+};
+
+exports.closeView = function(index){
+    console.log('closing coordinate view ' + index);
+    coordinateViewWindow[index].close();
+    //coordinateViewWindow.splice(index, 1);
 };
