@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="./lib/jquery-ui-1.12.1/jquery-ui.min.css"/>
+        <link rel="stylesheet" href="./lib/bootstrap-3.3.7/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="./lib/sweet-alert-6.10.1/sweetalert2.min.css"/>
+        <link rel="stylesheet" href="./css/style.css"/>
+
+        <script> window.$ = window.jQuery = require('./lib/jquery-3.2.1.min.js');</script>
+        <script src="./lib/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+        <script src="./lib/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+        <script src="./lib/sweet-alert-6.10.1/sweetalert2.all.min.js"></script>
+        <script src="./js/helper.js"></script>
+        <title>Update</title>
+        <script>
+            require('./needsToUpdate.js');
+        </script>
+    </head>
+    
+    <body>
+        <div style="overflow: auto; width: 300px; height: 300px">
+        <h3>You need to update to version <span id="version"></span></h3>
+        <p>Download from the official page</p>
+        <h4>Release Notes</h4>
+        <p id="releaseNotes" style="word-wrap: break-word"></p>
+        <button id="closeBtn" class="btn btn-danger">Close app</button>
+        </div>
+        
+    </body>
+</html>

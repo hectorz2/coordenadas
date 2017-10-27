@@ -1,21 +1,23 @@
 {
   "general": {
-    "state1Msg": "Hubo uno o varios problemas, inténtalo de nuevo más tarde o contacta con el administrador a través del correo hector.zaragoza.arranz@gmail.com, ¡no muerdo!",
+	"messages": {
+		"state1Msg": "There was one or many errors, try it again or contact with the administrator on mail hector.zaragoza.arranz@gmail.com, ¡I don't bite!"
+	},
     "confirmation": {
-      "title": "¿Está seguro de realizar la operación?",
-      "okBtn": "Sí, estoy seguro",
-      "cancelBtn": "No, sácame de aquí"
+      "title": "Are you sure of realize the operation?",
+      "okBtn": "Yes, I'm Sure",
+      "cancelBtn": "No, get me out of here"
     }
   },
   "main": {
     "nav": {
-      "logout": "Salir"
+      "logout": "Logout"
     },
     "disconnection": {
-      "title": "Conectando...",
-      "disconnectionAdvice": "¡Estás desconectado del servidor! Te avisaremos cuando se conecte, espera...",
-      "connectionAdvice": "¡Estás conectado al servidor!",
-      "loginAgainError": "Ups... Parece que hubo un error y tienes que iniciar sesión otra vez. Perdónanos."
+      "title": "Connecting...",
+      "disconnectionAdvice": "You are disconnected from server! We'll let you know when it reconnects, wait please...",
+      "connectionAdvice": "You are connected to server!",
+      "loginAgainError": "Ups... Looks like there was an error and you have to log in again. Forgive us."
     },
     "main": {
       "worlds": "Worlds",
@@ -23,61 +25,111 @@
       "help": "Help"
     },
     "login": {
-      "title": "Acceder",
+      "title": "Login",
       "nickLbl": "Nick",
       "passwordLbl": "Password",
-      "remember": "Recuérdame",
-      "notRemember": "No me recuerdes",
-      "loginBtn": "Entrar",
-      "notRegistered": "¿No estás registrado?",
-      "notRegisteredBtn": "Regístrate",
-      "fillFieldsError": "Debe rellenar todos los campos.",
-      "wrongUserOrPasswordError": "El nick no existe o te has confundido de contraseña...",
-      "loginDone": "Login correcto. ¡Diviértete!"
+      "remember": "Remember me",
+      "notRemember": "Dont't remember me",
+      "loginBtn": "Login",
+      "notRegistered": "Not registered yet?",
+      "notRegisteredBtn": "Register",
+      "fillFieldsError": "You must fill all the fields.",
+      "wrongUserOrPasswordError": "Nick not exists or you have confused your password...",
+      "loginDone": "Login done. ¡Get fun!"
     },
     "register": {
-      "title": "Registro",
-      "nickLbl": "Nick (9 caracteres como max.)",
-      "passworldLbl": "Password",
-      "registerBtn": "Registrar",
-      "fillFieldsError": "Debe rellenar todos los campos.",
-      "nickAlreadyExistsError": "El nick ya existe, ¡Prueba otro!",
-      "nickHasSpacesError": "El nick no debe contener espacios.",
-      "registerDone": "Usuario registrado correctamente, ¡Corre, haz login!",
+      "title": "Register",
+      "nickLbl": "Nick (9 characters max.)",
+      "passwordLbl": "Password",
+      "registerBtn": "Register",
+      "fillFieldsError": "You must fill all the fields.",
+      "nickAlreadyExistsError": "Nick already exists, Try with another!",
+      "nickHasSpacesError": "Nick must not contain spaces.",
+      "registerDone": "User register  was succesful, Run, log in!",
       "okBtn": "OK"
     },
+    "logout": {
+      "logoutDone": "You are logged out, we will miss you..."
+    },
     "worldList": {
-      "greeting": "Hola",
-      "leaveWorldAdvice": "Perderás el acceso al mundo y si no queda nadie... ¡Los datos serán borrados!",
-      "leaveWorldDone": "Saliste del mundo, te echarán de menos...",
-      "leaveWorldAndDeletedDone": "Saliste del mundo y como no quedó nadie dentro se ha borrado... :(",
-      "deleteWorldAdvice": "Borrarás todos los datos del mundo a los demás. Si solo deseas salir, ¡Utiliza el otro botón!",
-      "deleteWorldDone": "El mundo ha sido borrado.",
-      "noWorldsYet": "Ups... No hay ningún mundo todavía... ¿Por qué no añades alguno?",
-      "createWorldTitle": "Añadir Mundo",
-      "nameLbl": "Nombre del mundo (10 caracteres max.)",
-      "createWorldCloseBtn": "Cerrar",
-      "fillFieldsError": "Debe rellenar todos los campos.",
-      "createWorldDone": "Mundo creado. ¡Puedes comenzar a guardar tus coordenadas!",
-      "invitationsTitle": "¡Tienes invitaciones nuevas!",
-      "invitationsAcceptDone": "¡Ahora formas parte del mundo!",
-      "invitationsDenyDone": "Has rechazado la invitación.",
-      "invitationsCloseBtn": "Cerrar"
+      "greeting": "Hi",
+      "leaveWorldAdvice": "You will lost the access to the world and if nobody inside... Data will be removed!",
+      "leaveWorldDone": "You leave the world, they will miss you...",
+      "leaveWorldAndDeletedDone": "You leave the world and as no one left inside it has been erased... :(",
+      "deleteWorldAdvice": "You will erase all of the world data to the others. If you only want to leave, Use the another button!",
+      "deleteWorldDone": "The world was removed.",
+      "noWorldsYet": "Ups... There isn't any world yet... Why not create one?",
+      "createWorldTitle": "Add World",
+      "nameLbl": "World's name (10 characters max.)",
+      "createWorldCloseBtn": "Close",
+      "fillFieldsError": "You must fill all the fields.",
+      "createWorldDone": "World created. You can start to save your coordinates!",
+      "invitationsTitle": "You have new invitations!",
+      "invitationsAcceptDone": "You are part of the world now!",
+      "invitationsDenyDone": "You have declined the invitation.",
+      "invitationsCloseBtn": "Close"
+    },
+    "settings": {
+      "title": "Settings",
+      "languaje": "Languaje",
+      "languajeChangeAdvice": "Are you sure about change your languaje? The program will reboot."
     }
   },
   "coordinates": {
-    "worldMaintenance": {
-      "worldMaintenanceTitle": "Mantenimiento del mundo",
-      "pendingUsers": "Usuarios Pendientes",
-      "inviteUser": "Invitar Usuario",
-      "fillFieldsError": "El nick no puede estar vacío.",
-      "nickHasSpacesError": "El nick no debe contener espacios.",
-      "userNotExists": "El usuario no existe.",
-      "userWasAlreadyInvited": "El usuario ya está en el mundo o ya está invitado.",
-      "inviteUserDone": "Usuario invitado correctamente.",
-      "deleteInvitationAdvice": "El usuario perderá la invitación.",
-      "deleteInvitationDone": "Invitación cancelada correctamente.",
-      "WorldMaintenanceCloseBtn": "Cerrar"
+    "worldActions": {
+      "title": "World Maintenance",
+      "pendingUsers": "Pending Users",
+      "nickLbl": "Nick",
+      "inviteUser": "Invite User",
+      "fillFieldsError": "Nick can't be empty.",
+      "nickHasSpacesError": "Nick must not contain spaces.",
+      "userNotExists": "User doesn't exist.",
+      "userWasAlreadyInvited": "The user is already in the world or it's invited.",
+      "inviteUserDone": "User invited succesfully.",
+      "deleteInvitationAdvice": "The user will lost him invitation.",
+      "deleteInvitationDone": "Invitation canceled succesfully.",
+      "closeBtn": "Close",
+      "editWorldTitle": "Edit world's name",
+      "editWorldNameLbl": "World's Name (10 characters max.)",
+      "editWorldBtn": "Edit",
+      "editWorldCloseBtn": "Close",
+      "editWorldDone": "World updated succesfully.",
+      "editWorldFillFieldsError": "You must fill all the fields."
+    },
+    "loading": {
+      "loading": "Loading..."
+    },
+    "coordinates": {
+      "createGroup": "Add Group",
+      "createGroupTitle": "Add new group",
+      "editGroupTitle": "Edit group",
+      "createGroupCloseBtn": "Close",
+      "groupNameLbl": "Group's name (10 characters max.)",
+      "createGroupFillFieldsError": "Nick cannot be empty",
+      "createGroupGroupExistsError": "The group already exists, choose another name.",
+      "createGroupBtn": "Close",
+      "editGroupBtn": "Edit",
+      "createGroupDone": "Group created succesfully.",
+      "editGroupDone": "Group updated succesfully.",
+      "createCoordinateTitle": "Add new coordinate",
+      "editCoordinateTitle": "Edit coordinate",
+      "coordinateNameLbl": "Name (30 characters max.)",
+      "coordinateXLbl": "Coordinate X (min. -30000000  max. 30000000)",
+      "coordinateZLbl": "Coordinate Z (min. -30000000 max. 30000000)",
+      "coordinateYLbl": "Coordinate Y (min. 0 max. 256)",
+      "createCoordinateFillFieldsError": "You must fill all the fields.",
+      "createCoordinateCoordinateExistsError": "An identical coordinate already exists in this group.",
+      "createCoordinateBtn": "Create",
+      "editCoordinateBtn": "Edit",
+      "createCoordinateDone": "Coordinate created succesfully",
+      "editCoordinateDone": "Coordinate edited succesfully. Reload the coordinate view to see the changes.",
+      "createCoordinateCloseBtn": "Close",
+      "coordinateName": "Name",
+      "deleteGroupAdvice": "Group will be removed and that cannot be undone.",
+      "deleteCoordinateAdvice": "Coordinate will be removed and that cannot be undone.",
+      "deleteGroupDone": "Group removed succesfully.",
+      "deleteCoordinateDone": "Coordinate removed succesfully.",
+      "deleteGroupThereIsOnlyOneError": "Group cannot be removed because is the only one left."
     }
   }
 }

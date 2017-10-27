@@ -1,6 +1,8 @@
 {
   "general": {
-    "state1Msg": "Hubo uno o varios problemas, inténtalo de nuevo más tarde o contacta con el administrador a través del correo hector.zaragoza.arranz@gmail.com, ¡no muerdo!",
+	"messages": {
+		"state1Msg": "Hubo uno o varios problemas, inténtalo de nuevo más tarde o contacta con el administrador a través del correo hector.zaragoza.arranz@gmail.com, ¡no muerdo!"
+	},
     "confirmation": {
       "title": "¿Está seguro de realizar la operación?",
       "okBtn": "Sí, estoy seguro",
@@ -112,8 +114,8 @@
       "createCoordinateTitle": "Crear nueva coordenada",
       "editCoordinateTitle": "Editar coordenada",
       "coordinateNameLbl": "Nombre (30 caracteres max.)",
-      "coordinateXLbl": "Coordenada X (min. -30000000  max.30000000)",
-      "coordinateZLbl": "Coordenada Z (min. -30000000 max.30000000)",
+      "coordinateXLbl": "Coordenada X (min. -30000000  max. 30000000)",
+      "coordinateZLbl": "Coordenada Z (min. -30000000 max. 30000000)",
       "coordinateYLbl": "Coordenada Y (min. 0 max. 256)",
       "createCoordinateFillFieldsError": "Deben rellenarse todos los campos.",
       "createCoordinateCoordinateExistsError": "Ya existe una coordenada idéntica en este grupo.",

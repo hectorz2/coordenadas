@@ -1,0 +1,252 @@
+@font-face {
+	font-family: 'minecraftfont';
+	src: url('./fonts/minecraftfont.eot');
+	src: local('minecraftfont'), url('./fonts/minecraftfont.woff') format('woff'), url('./fonts/minecraftfont.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'mc';
+	src: url('./fonts/Minercraftory.ttf');
+}
+
+::-webkit-scrollbar {     
+    background-color: gray;
+    width: 0.8em
+}
+
+::-webkit-scrollbar-thumb:window-inactive,
+::-webkit-scrollbar-thumb {
+	border-radius: 90px;
+    background: SeaShell ;
+	/*box-shadow: 0px 0px 60px 5px rgba(255,255,255,1);*/
+	/*box-shadow: 0 0 8px 5px rgba(200,200,200,1);*/
+    border-left: 1px solid lightgray;
+}
+
+* {
+	font-family: 'mc';
+}
+body {
+	background: #aa8f79;
+	/*font-family: 'minecraftfont' !important*/;
+	overflow: hidden;
+}
+
+input[type="submit"],
+input[type="reset"],
+input[type="button"],
+input[type="text"],
+button,
+textarea {
+	-webkit-app-region: no-drag;
+}
+
+nav {
+	position: fixed;
+	top: 0;
+	left: 0;
+	margin: 3px;
+	margin-top: 0;
+	padding: 3px;
+	width: 100vw;
+	height: 42px;
+	/*background-color: black;*/
+	background-color: rgba(54, 25, 25, 0.1);
+	z-index: 99999;
+	-ms-overflow-style: scrollbar;
+    -webkit-app-region:drag;
+}
+nav * {
+	/*height: 100%;*/
+}
+
+nav button {
+	box-shadow: 2px 2px 18px -1px rgba(0,0,0,0.75);
+}
+
+.block  {	
+	opacity: 0.7;
+	transition: all 1s;
+	float: left;
+	margin: 15px;
+}
+.block img {
+	width: 100px;
+	height: auto;
+}
+
+.block h4 {
+	text-align: center;
+	margin-bottom: 5px;
+}
+
+.block:hover {
+	opacity: 1;
+	transform: scale(1.1);
+}
+
+.page {
+	position: absolute;
+	left: 0;
+	top: 55%;
+	transform: translate(4%, -55%);
+	opacity: 0;
+	transition: 1s;
+}
+#main {
+	opacity: 1;
+	z-index: 100;
+}
+
+#worldList {
+	width: 100%;
+	height: 300px;
+	overflow-y: auto;
+}
+
+.loader {
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+.modal-dialog {
+	position: absolute;
+	top: 20%;
+	left: 7%;
+	width: 80vw;
+  
+	text-align: left;
+  
+}
+
+
+/* Coordinates */
+#tmp {
+	margin-top: 50px;
+	transition: 1s;
+}
+#tmp h1 {
+	text-center: center;
+}
+
+#worldPanel {
+	width: 90vw;
+	height: 85vh;
+	margin-left: 5vw;
+	margin-right: 5vw;
+	display: none;
+	transition: 1s;
+	margin-top: 50px;
+}
+
+#coordinates {
+	height: 80vh;
+	background-color: white;
+	border: 1px solid lightgray;
+	overflow-y: auto;
+}
+
+#usersList {
+	overflow: auto;
+	height: 250px;
+}
+
+#pendingUsersList {
+    overflow: auto;
+    height: 125px;
+}
+
+div.ball {
+	display: block;
+	width: 30px;
+	height: 30px;
+    background-color: red;
+	border-radius: 50%;
+	box-shadow: inset -4px -4px 6px rgba(0,0,0,.5);
+	background-image: -webkit-linear-gradient(-45deg, rgba(255,255,220,.2) 0%, transparent 100%);
+	background-image: -moz-linear-gradient(-45deg, rgba(255,255,220,.2) 0%, transparent 100%);
+	background-image: -o-linear-gradient(-45deg, rgba(255,255,220,.2) 0%, transparent 100%);
+	background-image: -ms-linear-gradient(-45deg, rgba(255,255,220,.2) 0%, transparent 100%);
+	transform: scale(0.8);
+    margin: 2px 4px 4px;
+}
+
+#configs {
+    background-color: rgba(255, 255, 255, 0.2);
+	width: 90vw;
+	height: 70vh;
+	margin-left: 1.5vw;
+	margin-top: 15vh;
+    overflow-y: auto;
+}
+
+.childrenRightBorder div {
+    border-right: 1px solid lightgray;
+    word-wrap: break-word;
+    font-size: 85%;
+    text-align: right;
+}
+
+.coordTitle div {
+    text-decoration: underline;
+    text-align: center;
+    border-right: 1px solid gray;
+}
+
+.coordTitle {
+    background: lightgray;
+}
+
+.blink {
+    animation-name: blinkAnimation;
+    animation-duration: 1s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+@keyframes blinkAnimation {
+    0% { opacity: 1.0; }
+    50% { opacity: 0.0; }
+    100% { opacity: 1.0; }
+}
+
+/* Coordinate View */
+.coordinateView {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    left: 0;
+    top: 0;
+    -ms-overflow-style: scrollbar;
+    -webkit-app-region:drag;
+}
+
+.coordName {
+    color: white;
+    text-align: center;
+}
+
+.separate {
+    border-right: 1px solid black;
+}
+
+.bottomline {
+    border-bottom: 1px solid black;
+}
+#btn {
+    position: absolute;
+    top: 1vh;
+    left: 85vw;
+    z-index: 999;
+
+}

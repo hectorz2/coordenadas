@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="./lib/jquery-ui-1.12.1/jquery-ui.min.css"/>
+        <link rel="stylesheet" href="./lib/bootstrap-3.3.7/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="./lib/sweet-alert-6.10.1/sweetalert2.min.css"/>
+        <link rel="stylesheet" href="./css/style.css"/>
+
+        <script> window.$ = window.jQuery = require('./lib/jquery-3.2.1.min.js');</script>
+        <script src="./lib/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+        <script src="./lib/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+        <script src="./lib/sweet-alert-6.10.1/sweetalert2.all.min.js"></script>
+        <script src="./js/helper.js"></script>
+        <title>Coordinate</title>
+        <script>
+            require('./coordinateView.js');
+        </script>
+
+    </head>
+    
+    <body>
+        <div class="coordinateView">
+            <div class="container-fluid" id="coordinate">
+                <div id="btn">
+                    <button id="closeBtn" class="btn-xs btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 coordName" id="name"></div>
+                </div>
+                <div class="row bottomline">
+                    <div class="col-xs-2 col-xs-offset-1 separate">X</div>
+                    <div class="col-xs-9" id="x"></div>
+                </div>
+                <div class="row bottomline">
+                    <div class="col-xs-2 col-xs-offset-1 separate">Z</div>
+                    <div class="col-xs-9" id="z"></div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-2 col-xs-offset-1 separate">Y</div>
+                    <div class="col-xs-9" id="y"></div>
+                </div>
+
+            </div>
+
+        </div>
+    </body>
+</html>

@@ -1,40 +1,14 @@
 const mysql = require('mysql');
 
-/*
-var con = mysql.createConnection({
+const db_config = {
   /*host: 'localhost',
   user: 'root',
   password: '',
-  database: 'coordenadas'*//*
+  database: 'coordenadas'*/
   host: 'eu-cdbr-west-01.cleardb.com',
   user: 'b495f45466ac64',
   password: 'fce36c94',
   database: 'heroku_c08b20a02df2679'
-});
-
-
-con.connect(function(err) {
-  if (err) console.error(err);
-  console.log("Connected to mysql!");
-});
-con.on('error', function() {
-	console.log("Error on mysql!");
-	con.connect(function(err) {
-		if(err) console.error(err);
-		console.log("Connected to mysql!");
-	});
-
-});
-*/
-const db_config = {
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'coordenadas'
-  /*host: 'eu-cdbr-west-01.cleardb.com',
-  user: 'b495f45466ac64',
-  password: 'fce36c94',
-  database: 'heroku_c08b20a02df2679'*/
 };
 
 let con;
@@ -459,6 +433,19 @@ module.exports = {
                 } else {
                     console.log('coordinate deleted');
                     callback(0);
+                }
+            });
+        }
+    },
+    version: {
+        getLastVersion: function(callback) {
+            let sql = 'SELECT * FROM versions ORDER BY id DESC';
+            con.query(sql, [], function(err, result) {
+                if (err) {
+                    console.error(err);
+                    callback(1, null);
+                } else {
+                    callback(0, result[0]);
                 }
             });
         }

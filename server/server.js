@@ -369,6 +369,22 @@ io.on('connection', (socket) => {
         }
 
     });
+
+    socket.on('checkForUpdates', (version, answer) => {
+       console.log('looking for updates from version: ' + version);
+       dao.version.getLastVersion(function(state, lastVersion){
+           console.log('actual version: ' + lastVersion.version);
+           if(state === 0){
+               if(version == lastVersion.version){
+                   answer(0, null);
+               } else {
+                   answer(-1, lastVersion);
+               }
+           } else {
+               answer(1, null);
+           }
+       });
+    });
 	//socket.join('prueba');
 	//io.in('prueba').emit('kk', 'kk');
 });

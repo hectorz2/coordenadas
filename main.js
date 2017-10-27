@@ -1,4 +1,5 @@
-const VERSION = '0.9-ALFA'; //TODO hacer comprobacion
+const VERSION = '0.9-ALFA';
+let checked = false;
 
 const electron = require('electron');
 // Module to control application life.
@@ -14,9 +15,9 @@ const url = require('url');
 const settings = require('electron-settings');
 
 const io = require('socket.io-client');
-const socket = io.connect('http://localhost:3000', {reconnect: true});
-/*const socket = io.connect('https://mc-coordhelper-server.herokuapp.com/',
-    {reconnect: true, transports : ['websocket'], path: '/socket.io'});*/
+//const socket = io.connect('http://localhost:3000', {reconnect: true});
+const socket = io.connect('https://mc-coordhelper-server.herokuapp.com/',
+    {reconnect: true, transports : ['websocket'], path: '/socket.io'});
 
 const allowedLangs = [
     'es',
@@ -92,7 +93,7 @@ function createWindow () {
 function createBootWindow () {
 
     // Create the browser window.
-    bootWindow = new BrowserWindow({width: 120, height: 120, frame: false, icon: './img/icon.png', resizable: false, fullscreenable: false});
+    bootWindow = new BrowserWindow({width: 170, height: 170, frame: false, icon: './img/icon.png', resizable: false, fullscreenable: false});
 
     // and load the index.html of the app.
     bootWindow.loadURL(url.format({
@@ -112,27 +113,30 @@ function createBootWindow () {
     });
 }
 
-function createNeedsToUpdateWindow () {
+function createNeedsToUpdateWindow (lastVersion) {
 
     // Create the browser window.
-    needsToUpdateWindow = new BrowserWindow({width: 120, height: 120, frame: false, icon: './img/icon.png', resizable: false, fullscreenable: false});
+    needsToUpdateWindow = new BrowserWindow({width: 300, height: 300, frame: false, icon: './img/icon.png', resizable: false, fullscreenable: false});
 
     // and load the index.html of the app.
-    bootWindow.loadURL(url.format({
+    needsToUpdateWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'needsToUpdate.html'),
         protocol: 'file:',
         slashes: true
     }));
 
     // Open the DevTools.
-    // bootWindow.webContents.openDevTools()
+    // needsToUpdateWindow.webContents.openDevTools()
     // Emitted when the window is closed.
-    bootWindow.on('closed', function () {
+    needsToUpdateWindow.on('closed', function () {
         // Dereference the window object, usually you would store windows
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
-        bootWindow = null;
+        needsToUpdateWindow = null;
     });
+
+    needsToUpdateWindow.lastVersion = lastVersion;
+    bootWindow.close();
 }
 
 // This method will be called when Electron has finished
@@ -191,6 +195,8 @@ app.on('ready', function(){
 
 	//createWindow();
     createBootWindow();
+
+
 });
 
 function loadTexts(){
@@ -231,35 +237,37 @@ app.on('before-quit', function(){
 
 socket.on('connect', function(){
 	console.log('connected to websocket server');
-	console.log('checking version. Actual version is: ' + VERSION);
-    socket.emit('getLastVersion', '', (state) => {
 
-        if(state === 0){
-            console.log('app is updated');
-            createWindow();
-            bootWindow.close();
-            connected = true;
-            //if(userLogged !== {}) {
-            if(!(Object.keys(userLogged).length === 0 && userLogged.constructor === Object)){
-                console.log('user: ' + userLogged.nick + ' was renember, checking state...');
-                socket.emit('getLoginState', userLogged, (state) => {
-                    console.log('server state of login: ' + state);
-                    if (!state) userLogged = {};
-                    if (sendConnectionState !== '')
-                        sendConnectionState(connected);
-                });
+	if(!checked) {
+        console.log('checking version. Actual version is: ' + VERSION);
+        socket.emit('checkForUpdates', VERSION, (state, lastVersion) => {
+            checked = true;
+            if (state === 0) {
+                console.log('app is updated');
+                createWindow();
+                bootWindow.close();
+                connected = true;
+                //if(userLogged !== {}) {
+                if (!(Object.keys(userLogged).length === 0 && userLogged.constructor === Object)) {
+                    console.log('user: ' + userLogged.nick + ' was renember, checking state...');
+                    socket.emit('getLoginState', userLogged, (state) => {
+                        console.log('server state of login: ' + state);
+                        if (!state) userLogged = {};
+                        if (sendConnectionState !== '')
+                            sendConnectionState(connected);
+                    });
+                }
+                else if (sendConnectionState !== '')
+                    sendConnectionState(connected);
+            } else if (state === -1) {
+                console.log('app needs to update');
+                createNeedsToUpdateWindow(lastVersion);
+            } else {
+                console.log('there was an error');
+                app.quit();
             }
-            else
-            if(sendConnectionState !== '')
-                sendConnectionState(connected);
-        } else if(state === -1) {
-            console.log('app needs to update');
-            createNeedsToUpdateWindow();
-        } else {
-            console.log('there was an error');
-            app.quit();
-        }
-    });
+        });
+    }
 
 	if(settings.has('userRemembered')){
 		userLogged.nick = settings.get('userRemembered');
@@ -325,6 +333,11 @@ exports.quit = function(){
     settings.set('mainX', position[0]);
     settings.set('mainY', position[1]);
 	app.quit();
+};
+
+exports.quitForUpdate = function(){
+    console.log('the app isnt updated, have to quit');
+    app.quit();
 };
 
 exports.register = function(nick, pwd, answer){

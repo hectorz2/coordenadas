@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="UTF-8">
+      <link rel="stylesheet" href="./lib/jquery-ui-1.12.1/jquery-ui.min.css"/>
+      <link rel="stylesheet" href="./lib/bootstrap-3.3.7/css/bootstrap.min.css"/>
+      <link rel="stylesheet" href="./lib/sweet-alert-6.10.1/sweetalert2.min.css"/>
+      <link rel="stylesheet" href="./css/style.css"/>
+
+      <script> window.$ = window.jQuery = require('./lib/jquery-3.2.1.min.js');</script>
+      <script src="./lib/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+      <script src="./lib/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+      <script src="./lib/sweet-alert-6.10.1/sweetalert2.all.min.js"></script>
+      <script src="./js/helper.js"></script>
+      <script>
+          require('./coordinates.js');
+      </script>
+
+      <title>Coordenadas</title>
+  </head>
+  <body>
+    <nav class="container-fluid">
+			<div class="row">
+			    <!--<button onclick="location.reload();">R</button>-->
+				<div class="col-xs-3">
+					<h4 id="worldName"></h4>
+				</div>
+                <div class="col-xs-2">
+                    <button class="btn btn-info" id="worldActions"><span class="glyphicon glyphicon-wrench"></span></button>
+                </div>
+                <div class="col-xs-2">
+                    <button class="btn btn-warning" id="openEditWorld"><span class="glyphicon glyphicon-pencil"></span></button>
+                </div>
+                <div class="col-xs-2">
+                    <button class="btn btn-success" id="reloadCoordinates"><span class="glyphicon glyphicon-refresh"></span></button>
+                </div>
+				<div class="col-xs-2 col-xs-offset-1">
+					<button class="btn btn-danger pull-right" id="close"><span class="glyphicon glyphicon-remove"></span></button>
+				</div>
+			</div>
+    </nav>
+    <renderSection data-section="loading">
+    <div class="container">
+			<div class="row">
+				<div class="col-xs-4 col-xs-offset-2">
+					<div id="tmp">
+						<h1><render>loading</render></h1>
+						<br/>
+						<div class="col-xs-4 col-xs-offset-4">
+							<div class="loader"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+    </div>
+    </renderSection>
+    <renderSection data-section="coordinates">
+    <div id="worldPanel">
+        <div id="coordinates">
+            <ul id="tabs">
+            </ul>
+            <!--<div id="tab1">
+                <h1>Cuack!</h1>
+            </div>
+            -->
+        </div>
+        <br/>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-2 col-xs-offset-4">
+                    <button id="openCreateGroupBtn" class="btn btn-success"><render>createGroup</render></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- CreateGroup Modal -->
+            <div id="createGroupModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h3 class="modal-title" style="text-align: center"><span id="createGroupTitle"></span></h3>
+                        </div>
+                        <div class="modal-body">
+                            <form onsubmit="return false;">
+                                <br/>
+                                <label for="groupName"><render>groupNameLbl</render></label>
+                                <input class="form-control" id="groupName" maxlength="10"/>
+                                <br/>
+                                <button class="btn btn-primary" id="createGroupBtn"></button>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><render>createGroupCloseBtn</render></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <!-- Modal End -->
+
+
+        <!-- CreateCoordinate Modal -->
+        <div id="createCoordinateModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h3 class="modal-title" style="text-align: center"><span id="createCoordinateTitle"></span></h3>
+                    </div>
+                    <div class="modal-body">
+                        <form onsubmit="return false;">
+                            <br/>
+                            <label for="coordinateName"><render>coordinateNameLbl</render></label>
+                            <input class="form-control" id="coordinateName" maxlength="30"/>
+                            <label for="coordinateX"><render>coordinateXLbl</render></label>
+                            <input class="form-control" id="coordinateX" type="number" max="30000000" min="-30000000" value="0"/>
+                            <label for="coordinateZ"><render>coordinateZLbl</render></label>
+                            <input class="form-control" id="coordinateZ" type="number" max="30000000" min="-30000000" value="0"/>
+                            <label for="coordinateY"><render>coordinateYLbl</render></label>
+                            <input class="form-control" id="coordinateY" type="number" max="256" min="0" value="0"/>
+                            <br/>
+                            <button class="btn btn-primary" id="createCoordinateBtn"></button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal"><render>createCoordinateCloseBtn</render></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal End -->
+    </renderSection>
+    <!-- World Actions Modal -->
+    <renderSection data-section="worldActions">
+    <div id="worldActionsModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title" style="text-align: center"><render>title</render></h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row" style="height: 100%">
+                        <div class="col-xs-6" style="border-right: 1px solid black;">
+                            <div class="list-group" id="usersList">
+
+                            </div>
+                        </div>
+                        <div class="col-xs-4 col-xs-offset-1">
+                            <div class="row" style="border-bottom: 1px solid black">
+                                <h6 style="border-bottom: 1px solid black; text-align: center"><render>pendingUsers</render></h6>
+                                <div class="list-group" id="pendingUsersList">
+
+                                </div>
+                            </div>
+                            <div class="row" id="inviteUsers" >
+
+                                <div class="row">
+                                    <div class="col-xs-8">
+                                         <h6><render>inviteUser</render></h6>
+                                    </div>
+                                    <div class="col-xs-1">
+                                        <button class="btn btn-info" id="inviteUserBtn" style="margin-top: 8px"><span class="glyphicon glyphicon-envelope"></span></button>
+                                    </div>
+                                </div>
+                                <label for="nickOfUser"><render>nickLbl</render></label>
+                                <input id="nickOfUser" class="form-control"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><render>closeBtn</render></button>
+                </div>
+            </div>
+        </div>
+    </div>
+        <!-- Modal End -->
+
+        <!-- CreateGroup Modal -->
+        <div id="editWorldModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h3 class="modal-title" style="text-align: center"><render>editWorldTitle</render></h3>
+                    </div>
+                    <div class="modal-body">
+                        <form onsubmit="return false;">
+                            <br/>
+                            <label for="worldName"><render>editWorldNameLbl</render></label>
+                            <input class="form-control" id="worldNameInput" maxlength="10"/>
+                            <br/>
+                            <button class="btn btn-primary" id="editWorldBtn"><render>editWorldBtn</render></button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal"><render>editWorldCloseBtn</render></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal End -->
+    </renderSection>
+
+  </body>
+</html>
