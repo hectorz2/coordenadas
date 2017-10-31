@@ -6,9 +6,9 @@ const db_config = {
   password: '',
   database: 'coordenadas'*/
   host: 'eu-cdbr-west-01.cleardb.com',
-  user: 'b495f45466ac64',
-  password: 'fce36c94',
-  database: 'heroku_c08b20a02df2679'
+  user: 'bf0a881d240e02',
+  password: '8dcead6d',
+  database: 'heroku_97a3008bb76e5f7'
 };
 
 let con;
@@ -25,7 +25,7 @@ function handleDisconnect() {
 	});                                     // process asynchronous requests in the meantime.
                                           // If you're also serving http, display a 503 error.
 	con.on('error', function(err) {
-		console.log('db error');
+		//console.log('db error');
 		if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
 			handleDisconnect();                         // lost due to either server restart, or a
 		} else {                                      // connnection idle timeout (the wait_timeout

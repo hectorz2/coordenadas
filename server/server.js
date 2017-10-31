@@ -19,6 +19,11 @@ const crypto = require('crypto');
 
 const dao = require('./dao');
 
+var http = require("http");
+setInterval(function() {
+    http.get("http://mc-coordhelper-server.herokuapp.com");
+}, 300000); // every 5 minutes (300000)
+
 let usersLogged = {
 	
 };

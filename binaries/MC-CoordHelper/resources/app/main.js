@@ -633,5 +633,6 @@ exports.createView = function(coordinate){
 exports.closeView = function(index){
     console.log('closing coordinate view ' + index);
     coordinateViewWindow[index].close();
+	coordinateViewWindow[index] = null;
     //coordinateViewWindow.splice(index, 1);
 };
