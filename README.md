@@ -1,8 +1,8 @@
-<h1><a href="#spanish">Español</a></h1>
-<h1><a href="#english">Englishe</a></h1>
+<h1><a href="#spanishAnchor">Español</a></h1>
+<h1><a href="#englishAnchor">English</a></h1>
 <br/>
 <br/>
-<h1><a id="spanish"></a>Español</h1>
+<h1><a id="spanishAnchor"></a>Español</h1>
 <h1>MC-CoordHelper | Versión 0.9-Alfa</h1>
 <p>
   ¿Cansado de apuntar tus coordenadas en un bloc de notas? <br/>
@@ -57,7 +57,7 @@ Para cualquier duda, aporte, fallo, o pregunta escribid a hzaragoza.developer@gm
 <br/>
 <br/>
 <br/>
-<h1><a id="english"></a>English</h1>
+<h1><a id="englishAnchor"></a>English</h1>
 <h1>MC-CoordHelper | Version 0.9-Alfa</h1>
 <p>
   ¿Cansado de apuntar tus coordenadas en un bloc de notas? <br/>
