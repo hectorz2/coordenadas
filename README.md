@@ -77,7 +77,7 @@ When you are in the login screen, click on the "Register" button to create a use
   <br/>
   If a new version of the application comes out, it will notify you and it will not open, you can download the latest version of the same link that you downloaded the first one.
 </ p>
-<h3> Keyboard Shortcuts </ h3>
+<h3> Keyboard Shortcuts </h3>
 <p>
   - Ctrl+Shift+O: Open the window of coordinates if it were already open, or the list of worlds if not. <br/>
   - Ctrl+Shift+C: Close all the coordinates information windows if there are any. <br/>
