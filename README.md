@@ -1,10 +1,14 @@
+<h1><a href="#spanish">Español</a></h1>
+<h1><a href="#english">English</a></h1>
+<br/>
+<br/>
+<h1><a id="spanish"></a>Español</h1>
 <h1>MC-CoordHelper | Versión 0.9-Alfa</h1>
 <p>
   ¿Cansado de apuntar tus coordenadas en un bloc de notas? <br/>
   ¿Harto de complicados métodos para compartir las coordenadas con tus amigos en tus servidores? <br/>
   MC-CoordHelper está aquí, tranquilos.
 </p>
-<br/>
 <h3>Cómo se empieza</h3>
 <p>
   Empezar en MC-CoordHelper es muy sencillo, descarga la última versión a través de <a href="https://drive.google.com/file/d/0B-RHqixhE4jLb3lhNWItN3BZSnc/view">éste enlace</a>, extráelo usando Winrar, un programa gratuíto que puedes obtener a través del <a   href="https://www.winrar.es/descargas">siguiente enlace</a> y haz doble clic en el ejectable de su interior.
@@ -50,3 +54,8 @@
 <br/>
 Para cualquier duda, aporte, fallo, o pregunta escribid a hzaragoza.developer@gmail.com
 </p>
+<br/>
+<br/>
+<br/>
+<h1><a id="english"></a>English</h1>
+<h1>MC-CoordHelper | Version 0.9-Alfa</h1>
