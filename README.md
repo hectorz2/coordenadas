@@ -34,7 +34,7 @@
 - [x] Ventana de información de coordenada superpuesta al resto de ventanas para tenerla siempre visible  <br/>
 - [x] Invitar a otros usuarios al mundo <br/>
 - [x] Cambiar el idioma de la aplicación <br/>
-- [x] Auto-detectar el idioma al primer arranque del equipo <br/>
+- [x] Auto-detectar el idioma al primer arranque de la aplicación <br/>
 - [x] Recordar posición de la aplicación y al abrirse colocarse donde estaba anteriormente <br/>
 - [ ] Aparición automática de cambios en el mundo por otros usuarios <br/>
 - [ ] Información en la lista de mundos de quién creó el mundo para diferenciarlo de los tuyos <br/>
