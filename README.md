@@ -1,3 +1,22 @@
+ ### Funtionalitiespepepe
+- [x] Anotar tus coordenadas se ha vuelto infinitamente más sencillo <br/>
+- [x] Crear mundos <br/>
+- [x] Crear grupos de coordenadas en cada mundo <br/>
+- [x] Crear coordenadas en cada grupo de mundo <br/>
+- [x] Editar y borrar todo lo anterior <br/>
+- [x] Ventana de información de coordenada superpuesta al resto de ventanas para tenerla siempre visible  <br/>
+- [x] Invitar a otros usuarios al mundo <br/>
+- [x] Cambiar el idioma de la aplicación <br/>
+- [x] Auto-detectar el idioma al primer arranque de la aplicación <br/>
+- [x] Recordar posición de la aplicación y al abrirse colocarse donde estaba anteriormente <br/>
+- [ ] Aparición automática de cambios en el mundo por otros usuarios <br/>
+- [ ] Información en la lista de mundos de quién creó el mundo para diferenciarlo de los tuyos <br/>
+- [ ] Aparición en el pop-up de invitaciones pendientes de quién te ha invitado <br/>
+- [ ] Creación de la sección "ayuda" <br/>
+- [ ] Creación de un formulario para notificar errores de forma más cómoda <br/>
+- [ ] Creación de un auto-actualizador de la aplicación <br/>
+- [ ] Auto-adaptar el alto de la ventana de coordenadas al alto del monitor <br/>
+- [ ] Atajo de teclado para realizar una búsqueda rápida de alguna coordenada <br/>
 <h1><a href="#spanishAnchor">Español</a></h1>
 <h1><a href="#englishAnchor">English</a></h1>
 <br/>
