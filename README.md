@@ -26,7 +26,7 @@
 </p>
 <h3>Funcionalidades</h3>
 <p>
-- [x] Anotar tus coordenadas se ha vuelto infinitamente mas sencillo <br/>
+- [x] Anotar tus coordenadas se ha vuelto infinitamente más sencillo <br/>
 - [x] Crear mundos <br/>
 - [x] Crear grupos de coordenadas en cada mundo <br/>
 - [x] Crear coordenadas en cada grupo de mundo <br/>
