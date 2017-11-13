@@ -31,7 +31,7 @@
 - [x] Crear grupos de coordenadas en cada mundo <br/>
 - [x] Crear coordenadas en cada grupo de mundo <br/>
 - [x] Editar y borrar todo lo anterior <br/>
-- [x] Ventana de información de coordenada super puesta al resto de ventanas para tenerla siempre visible  <br/>
+- [x] Ventana de información de coordenada superpuesta al resto de ventanas para tenerla siempre visible  <br/>
 - [x] Invitar a otros usuarios al mundo <br/>
 - [x] Cambiar el idioma de la aplicación <br/>
 - [x] Auto-detectar el idioma al primer arranque del equipo <br/>
