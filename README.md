@@ -7,7 +7,7 @@
 <br/>
 <h3>Cómo se empieza</h3>
 <p>
-  Empezar en MC-CoordHelper es muy sencillo, descarga la última versión a través de <a href="https://drive.google.com/open?id=0B-   RHqixhE4jLb3lhNWItN3BZSnc">éste enlace</a>, extráelo usando Winrar, un programa gratuíto que puedes obtener a través del <a   href="https://www.winrar.es/descargas">siguiente enlace</a> y haz doble clic en el ejectable de su interior.
+  Empezar en MC-CoordHelper es muy sencillo, descarga la última versión a través de <a href="https://drive.google.com/file/d/0B-RHqixhE4jLb3lhNWItN3BZSnc/view">éste enlace</a>, extráelo usando Winrar, un programa gratuíto que puedes obtener a través del <a   href="https://www.winrar.es/descargas">siguiente enlace</a> y haz doble clic en el ejectable de su interior.
   <br/>
   Al abrirse el programa podrás ver un menú con tres opciones. <br/>
   - La primera, mundos, te llevará a la pantalla de login. <br/>
