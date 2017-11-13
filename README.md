@@ -82,6 +82,7 @@ When you are in the login screen, click on the "Register" button to create a use
   - Ctrl+Shift+O: Open the window of coordinates if it were already open, or the list of worlds if not. <br/>
   - Ctrl+Shift+C: Close all the coordinates information windows if there are any. <br/>
 </p>
+
   ### Funtionalities
 - [x] Writing down your coordinates has become infinitely easier <br/>
 - [x] Create worlds <br/>
