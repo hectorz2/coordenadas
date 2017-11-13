@@ -1,5 +1,5 @@
 <h1><a href="#spanish">Español</a></h1>
-<h1><a href="#english">English</a></h1>
+<h1><a href="#english">Englishe</a></h1>
 <br/>
 <br/>
 <h1><a id="spanish"></a>Español</h1>
