@@ -28,8 +28,8 @@
   - Ctrl+Shift+O: Abre la ventana de coordenadas si estuviese ya abierta, o en su defecto la lista de mundos. <br/>
   - Ctrl+Shift+C: Cierra todas las ventanas de información de coordenadas si las hubiera. <br/>
 </p>
-<h3>Funcionalidades</h3>
-<p>
+
+  ### Funcionalidades
 - [x] Anotar tus coordenadas se ha vuelto infinitamente más sencillo <br/>
 - [x] Crear mundos <br/>
 - [x] Crear grupos de coordenadas en cada mundo <br/>
@@ -48,7 +48,6 @@
 - [ ] Creación de un auto-actualizador de la aplicación <br/>
 - [ ] Auto-adaptar el alto de la ventana de coordenadas al alto del monitor <br/>
 - [ ] Atajo de teclado para realizar una búsqueda rápida de alguna coordenada <br/>
-</p>
 <p>
 <br/>
 <br/>
