@@ -38,7 +38,7 @@
 - [x] Recordar posición de la aplicación y al abrirse colocarse donde estaba anteriormente <br/>
 - [ ] Aparición automática de cambios en el mundo por otros usuarios <br/>
 - [ ] Información en la lista de mundos de quién creó el mundo para diferenciarlo de los tuyos <br/>
-- [ ] Aparición en el pop-up de invitaciones pendientes quién te ha invitado <br/>
+- [ ] Aparición en el pop-up de invitaciones pendientes de quién te ha invitado <br/>
 - [ ] Creación de la sección "ayuda" <br/>
 - [ ] Creación de un formulario para notificar errores de forma más cómoda <br/>
 - [ ] Creación de un auto-actualizador de la aplicación <br/>
