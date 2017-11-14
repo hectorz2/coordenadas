@@ -131,6 +131,7 @@ io.on('connection', (socket) => {
             dao.world.usersInWorld(user.worldId, function (state, users) {
                 if (state === 0) {
                     console.log('users retrieved: ' + JSON.stringify(users));
+                    console.log('users actually in world: ' + worlds[user.worldId]);
                     for (let thisUser in users) {
                         if (users.hasOwnProperty(thisUser)) {
                             users[thisUser].connected = worlds[user.worldId].indexOf(users[thisUser].nick) !== -1;

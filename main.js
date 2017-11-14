@@ -15,9 +15,9 @@ const url = require('url');
 const settings = require('electron-settings');
 
 const io = require('socket.io-client');
-//const socket = io.connect('http://localhost:3000', {reconnect: true});
-const socket = io.connect('https://mc-coordhelper-server.herokuapp.com/',
-    {reconnect: true, transports : ['websocket'], path: '/socket.io'});
+const socket = io.connect('http://localhost:3000', {reconnect: true});
+/*const socket = io.connect('https://mc-coordhelper-server.herokuapp.com/',
+    {reconnect: true, transports : ['websocket'], path: '/socket.io'});*/
 
 const allowedLangs = [
     'es',
@@ -419,13 +419,26 @@ exports.selectWorld = function(worldId, selectedWorldName, answer){
 		}
 
 		worldName = selectedWorldName;
-		coordinatesWindow = new BrowserWindow({width: 600, height: 800, frame: false, resizable: false, fullscreenable: false});
+
+        let screenElectron = electron.screen;
+        let mainScreen = screenElectron.getPrimaryDisplay();
+        let dimensions = mainScreen.size;
+        let screenHeight = dimensions.height;
+        console.log(screenHeight + 'px of total height');
+        console.log(Math.floor(screenHeight*0.9) + 'px of coordinates height');
+        coordinatesWindow = new BrowserWindow({width: 600, height: Math.floor(screenHeight*0.9)/*800*/, frame: false, resizable: false, fullscreenable: false});
 
         if(settings.has('coordinatesX') && settings.has('coordinatesY')){
             console.log('position of main window is defined');
             let x = settings.get('coordinatesX');
             let y = settings.get('coordinatesY');
             coordinatesWindow.setPosition(x, y);
+            let nearestScreen = screenElectron.getDisplayNearestPoint({x: x, y: y});
+            let dimensions = nearestScreen.size;
+            let screenHeight = dimensions.height;
+            console.log(screenHeight + 'px of total height of the monitor');
+            console.log(Math.floor(screenHeight*0.9) + 'px of coordinates height');
+            coordinatesWindow.setSize(coordinatesWindow.getSize()[0], Math.floor(screenHeight*0.9));
         }
 
 
