@@ -1,5 +1,4 @@
 'use strict';
-
 const express = require('express');
 const socketIO = require('socket.io');
 const path = require('path');
@@ -19,7 +18,7 @@ const crypto = require('crypto');
 
 const dao = require('./dao');
 
-var http = require("http");
+let http = require("http");
 setInterval(function() {
     http.get("http://mc-coordhelper-server.herokuapp.com");
 }, 300000); // every 5 minutes (300000)
@@ -376,12 +375,12 @@ io.on('connection', (socket) => {
 
     });
 
-    socket.on('checkForUpdates', (version, answer) => {
-       console.log('looking for updates from version: ' + version);
+    socket.on('checkForUpdates', (data, answer) => {
+       console.log('looking for updates from version: ' + data.version);
        dao.version.getLastVersion(function(state, lastVersion){
            console.log('actual version: ' + lastVersion.version);
            if(state === 0){
-               if(version == lastVersion.version){
+               if(data.version == lastVersion.version){
                    answer(0, null);
                } else {
                    answer(-1, lastVersion);

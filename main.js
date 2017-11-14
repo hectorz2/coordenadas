@@ -1,4 +1,7 @@
 const VERSION = '0.9-ALFA';
+
+const logger = require('./js/logger');
+
 let checked = false;
 
 const electron = require('electron');
@@ -18,6 +21,8 @@ const io = require('socket.io-client');
 const socket = io.connect('http://localhost:3000', {reconnect: true});
 /*const socket = io.connect('https://mc-coordhelper-server.herokuapp.com/',
     {reconnect: true, transports : ['websocket'], path: '/socket.io'});*/
+
+
 
 const allowedLangs = [
     'es',
@@ -143,6 +148,7 @@ function createNeedsToUpdateWindow (lastVersion) {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', function(){
+    logger.trace('starting...');
 	//Create global shortcuts
 	// noinspection JSCheckFunctionSignatures
     globalShortcut.register('CommandOrControl+Shift+C', () => {
@@ -234,13 +240,12 @@ app.on('before-quit', function(){
 // code. You can also put them in separate files and require them here.
 
 
-
 socket.on('connect', function(){
 	console.log('connected to websocket server');
 
 	if(!checked) {
         console.log('checking version. Actual version is: ' + VERSION);
-        socket.emit('checkForUpdates', VERSION, (state, lastVersion) => {
+        socket.emit('checkForUpdates', {version: VERSION}, (state, lastVersion) => {
             checked = true;
             if (state === 0) {
                 console.log('app is updated');
@@ -277,7 +282,6 @@ socket.on('connect', function(){
 	}
 
 });
-	
 socket.on('connect_error', function(error){
 	console.log('Server down. ' + error);
 	connected = false;
@@ -510,7 +514,7 @@ exports.deleteInvitationToWorld = function(nick, answer) {
 
 exports.removeWorld = function(worldId, answer){
 	console.log('removing world: ' + worldId);
-	
+
 	socket.emit('removeWorld', {user: userLogged, id: worldId}, function(state){
 		answer(state);
 		console.log('world removed');
@@ -520,7 +524,7 @@ exports.removeWorld = function(worldId, answer){
 
 exports.saveWorld = function(name, answer){
 	console.log('adding world with name: ' + name);
-	
+
 	socket.emit('createWorld', {user: userLogged, name: name}, function(state){
 		answer(state);
 		console.log('world created');
