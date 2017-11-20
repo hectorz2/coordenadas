@@ -1,4 +1,5 @@
-![Alt icon](icon.png?raw=true "MC-CoordHelper") ![Alt logo](logo.png?raw=true "hzaragoza")
+<img src="icon.png" alt="icon" width="200" height="200"><img src="logo.png" alt="icon" width="200" height="200">
+
 <h1><a href="#spanishAnchor">Español</a></h1>
 <h1><a href="#englishAnchor">English</a></h1>
 <br/>
