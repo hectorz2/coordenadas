@@ -1,3 +1,4 @@
+![Alt icon](icon.png?raw=true "Icono")
 <h1><a href="#spanishAnchor">Español</a></h1>
 <h1><a href="#englishAnchor">English</a></h1>
 <br/>
