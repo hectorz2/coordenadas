@@ -1,4 +1,4 @@
-<img src="icon.png" alt="icon" width="200" height="200"/><img src="logo.png" alt="icon" width="200" height="200" style="border: 1px solid black"/>
+<img src="icon.png" alt="icon" width="200" height="200"/><img src="logo.png" alt="icon" width="200" height="200" align="right"/>
 
 <h1><a href="#spanishAnchor">Español</a></h1>
 <h1><a href="#englishAnchor">English</a></h1>
